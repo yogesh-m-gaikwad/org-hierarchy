@@ -1,0 +1,104 @@
+body {
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+  overflow-y: hidden;
+}
+
+.main {
+  padding: 0;
+  padding-left: 20px;
+  margin: 5px 0;
+  list-style-type: none;
+  position: relative;
+}
+
+.head,
+.team {
+  margin: 5px 0;
+  list-style-type: none;
+  border-left: 2px solid #000;
+  margin-left: 20px;
+}
+
+.teamleader {
+  margin: 5px 0;
+  list-style-type: none;
+  margin-left: 20px;
+}
+
+.member {
+  margin: 5px 0;
+  list-style-type: none;
+  border-left: 2px solid #000;
+  margin-left: -22px;
+}
+
+.main div,
+.head div,
+.team div,
+.teamleader div {
+  padding-left: 20px;
+  position: relative;
+}
+
+.member div {
+  padding-left: -22px;
+  position: relative;
+}
+
+.main div::before,
+.head div::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -2px;
+  bottom: 50%;
+  width: 0.75em;
+  border: 2px solid #000;
+  border-top: 0 none transparent;
+  border-right: 0 none transparent;
+}
+
+.team div::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -2px;
+  bottom: 80%;
+  width: 0.75em;
+  border: 2px solid #000;
+  border-top: 0 none transparent;
+  border-right: 0 none transparent;
+}
+
+.teamleader div::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -2px;
+  bottom: 40%;
+  width: 0.75em;
+  border: 2px solid #000;
+  border-top: 0 none transparent;
+  border-right: 0 none transparent;
+}
+
+.member div::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -2px;
+  bottom: 80%;
+  width: 0.75em;
+  border: 2px solid #000;
+  border-top: 0 none transparent;
+  border-right: 0 none transparent;
+}
+
+.main > div:last-child,
+.head > div:last-child,
+.teamleader > div:last-child,
+.member > div:last-child {
+  border-left: 2px solid transparent;
+}
