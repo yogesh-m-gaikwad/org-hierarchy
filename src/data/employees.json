@@ -1,0 +1,201 @@
+[
+  {
+    "_id": "1001",
+    "name": "Ramnath",
+    "role": "CEO",
+    "email": "ramnath@hierarchy.org",
+    "phone": "+022667867869",
+    "type": "main",
+    "parent_id": null
+  },
+  {
+    "_id": "1002",
+    "name": "Virag",
+    "role": "Head of HR",
+    "email": "virag@hierarchy.org",
+    "phone": "+022667867863",
+    "type": "head",
+    "parent_id": "1001"
+  },
+  {
+    "_id": "1003",
+    "name": "Aman",
+    "role": "Head of Engineering",
+    "email": "aman@hierarchy.org",
+    "phone": "+022667867861",
+    "type": "head",
+    "parent_id": "1001"
+  },
+  {
+    "_id": "1004",
+    "name": "Vaishali",
+    "role": "Head of Design",
+    "email": "vaishali@hierarchy.org",
+    "phone": "+022667867860",
+    "type": "head",
+    "parent_id": "1001"
+  },
+  {
+    "_id": "1005",
+    "name": "Team Alpha",
+    "email": "teamalpha@hierarchy.org",
+    "phone": "",
+    "type": "team",
+    "parent_id": "1002"
+  },
+  {
+    "_id": "1006",
+    "name": "Team Beta",
+    "email": "teambeta@hierarchy.org",
+    "phone": "",
+    "type": "team",
+    "parent_id": "1002"
+  },
+  {
+    "_id": "1007",
+    "name": "Team Xeta",
+    "email": "teamxeta@hierarchy.org",
+    "phone": "",
+    "type": "team",
+    "parent_id": "1002"
+  },
+
+  {
+    "_id": "1008",
+    "name": "Ravin",
+    "role": "Engineer",
+    "email": "ravin@hierarchy.org",
+    "phone": "+022878978763",
+    "type": "teamleader",
+    "parent_id": "1005"
+  },
+  {
+    "_id": "1009",
+    "name": "Joy",
+    "role": "Engineer",
+    "email": "joy@hierarchy.org",
+    "phone": "+022878978763",
+    "type": "member",
+    "parent_id": "1008"
+  },
+  {
+    "_id": "1016",
+    "name": "Vishu",
+    "role": "Engineer",
+    "email": "vishu@hierarchy.org",
+    "phone": "+022878978463",
+    "type": "member",
+    "parent_id": "1008"
+  },
+
+  {
+    "_id": "1010",
+    "name": "Vrind",
+    "role": "Engineer",
+    "email": "vrind@hierarchy.org",
+    "phone": "+022878978761",
+    "type": "teamleader",
+    "parent_id": "1006"
+  },
+  {
+    "_id": "1011",
+    "name": "Surendra",
+    "role": "Engineer",
+    "email": "surendra@hierarchy.org",
+    "phone": "+022878978765",
+    "type": "member",
+    "parent_id": "1010"
+  },
+
+  {
+    "_id": "1017",
+    "name": "Manasi",
+    "role": "Engineer",
+    "email": "manasi@hierarchy.org",
+    "phone": "+022878478761",
+    "type": "teamleader",
+    "parent_id": "1007"
+  },
+  {
+    "_id": "1018",
+    "name": "Rudra",
+    "role": "Engineer",
+    "email": "rudra@hierarchy.org",
+    "phone": "+022878578765",
+    "type": "member",
+    "parent_id": "1017"
+  },
+
+  {
+    "_id": "1012",
+    "name": "Team Design 01",
+    "email": "teamdesign01@hierarchy.org",
+    "phone": "",
+    "type": "team",
+    "parent_id": "1004"
+  },
+  {
+    "_id": "1013",
+    "name": "Riya",
+    "role": "Engineer",
+    "email": "riya@hierarchy.org",
+    "phone": "+022878978764",
+    "type": "teamleader",
+    "parent_id": "1012"
+  },
+  {
+    "_id": "1014",
+    "name": "Gor",
+    "role": "Engineer",
+    "email": "gor@hierarchy.org",
+    "phone": "+022878948765",
+    "type": "member",
+    "parent_id": "1013"
+  },
+  {
+    "_id": "1015",
+    "name": "Vishwas",
+    "role": "Engineer",
+    "email": "vishwas@hierarchy.org",
+    "phone": "+022875978765",
+    "type": "member",
+    "parent_id": "1013"
+  },
+
+  {
+    "_id": "1019",
+    "name": "Team Engineer 01",
+    "email": "teameng01@hierarchy.org",
+    "phone": "",
+    "type": "team",
+    "parent_id": "1003",
+    "level": 3
+  },
+  {
+    "_id": "1020",
+    "name": "Vamasi",
+    "role": "Engineer",
+    "email": "vamasi@hierarchy.org",
+    "phone": "+022828978764",
+    "type": "teamleader",
+    "parent_id": "1019"
+  },
+  {
+    "_id": "1021",
+    "name": "Gord",
+    "role": "Engineer",
+    "email": "gord@hierarchy.org",
+    "phone": "+022848948765",
+    "type": "member",
+    "parent_id": "1020"
+  },
+  {
+    "_id": "1022",
+    "name": "Rohan",
+    "role": "Engineer",
+    "email": "rohan@hierarchy.org",
+    "phone": "+022835978765",
+    "type": "member",
+    "parent_id": "1020"
+  }
+]
