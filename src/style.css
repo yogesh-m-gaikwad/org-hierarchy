@@ -11,6 +11,7 @@ body {
   margin: 5px 0;
   list-style-type: none;
   position: relative;
+  height: 100%;
 }
 
 .head,
@@ -101,4 +102,81 @@ body {
 .teamleader > div:last-child,
 .member > div:last-child {
   border-left: 2px solid transparent;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+.header {
+  color: #ffffff;
+}
+
+.filter-bar {
+  padding-bottom: 10px;
+}
+
+.hierarchy-container {
+  height: 100%;
+  width: 100%;
+  padding-top: 10px;
+  overflow-y: auto;
+}
+
+.hierarchy-container::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(155, 165, 182, 0.3);
+  background-color: #8a9499;
+}
+
+.hierarchy-container::-webkit-scrollbar {
+  width: 8px;
+  background-color: #c4cfd9;
+}
+
+.hierarchy-container::-webkit-scrollbar-thumb {
+  background-color: #c4cfd9;
+  border: 0px solid #c2c2c2;
+  border-radius: 10px;
+}
+
+.main-layout {
+  height: 100vh;
+}
+
+.action-icon {
+  padding: 2px 4px;
+  color: #2e2674;
+}
+
+.form-row {
+  margin-bottom: 10px;
+}
+
+.form-label {
+  margin-right: 10px;
+  text-align: right;
+}
+
+label.required::before {
+  content: '*';
+  color: rgba(235, 8, 8, 0.863);
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+.form-field {
+  min-width: 100px;
+}
+
+.form-button {
+  margin-right: 10px;
+}
+
+main {
+  min-height: 500px !important;
+}
+
+.error-message {
+  color: rgba(235, 8, 8, 0.863);
+  font-size: 14px;
 }

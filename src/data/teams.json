@@ -1,0 +1,37 @@
+[
+  {
+    "_id": "T1001",
+    "name": "Team Alpha",
+    "email": "teamalpha@hierarchy.org",
+    "type": "team",
+    "manager_id": "1002"
+  },
+  {
+    "_id": "T1002",
+    "name": "Team Beta",
+    "email": "teambeta@hierarchy.org",
+    "type": "team",
+    "manager_id": "1002"
+  },
+  {
+    "_id": "T1003",
+    "name": "Team Xeta",
+    "email": "teamxeta@hierarchy.org",
+    "type": "team",
+    "manager_id": "1002"
+  },
+  {
+    "_id": "T1004",
+    "name": "Team Design 01",
+    "email": "teamdesign01@hierarchy.org",
+    "type": "team",
+    "manager_id": "1004"
+  },
+  {
+    "_id": "T1005",
+    "name": "Team Engineer 01",
+    "email": "teameng01@hierarchy.org",
+    "type": "team",
+    "manager_id": "1003"
+  }
+]
