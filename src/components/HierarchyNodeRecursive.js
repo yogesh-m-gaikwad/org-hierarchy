@@ -1,7 +1,10 @@
+import { faPenToSquare, faRectangleList, faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import { isEmpty, isObject } from '../utils/utils';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import React from 'react';
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 const HierarchyNodeRecursive = ({ data }) => {
   if (isObject(data)) {
@@ -14,35 +17,45 @@ const HierarchyNodeRecursive = ({ data }) => {
       showUrl = `/team/${data._id}`;
     }
 
-    if (!isEmpty(data.children)) {
+    if (data.children && data.children.length > 0) {
       return (
         <>
           <div className={`row ${data.type} hierarchy-entry`}>
-            <div className="">{nodeName}</div>
+            <div className="">
+              <FontAwesomeIcon icon={faCaretRight} style={{ paddingRight: 10, paddingBottom: 0 }} />
+              <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
+                {nodeName}
+              </Link>
+            </div>
             <div className="hierarchy-buttons">
               <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
-                <input className="button button-clear button-inline" type="submit" value="Edit" />
+                {/* <input className="button button-clear button-inline" type="submit" value="Edit" /> */}
+                <FontAwesomeIcon icon={faPenToSquare} />
               </Link>
               <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
-                <input className="button button-clear button-inline" type="submit" value="Show" />
+                {/* <input className="button button-clear button-inline" type="submit" value="Show" /> */}
+                <FontAwesomeIcon icon={faRectangleList} />
               </Link>
             </div>
           </div>
-          {data.children.map((child, key) => {
-            return <HierarchyNodeRecursive data={child} key={key}></HierarchyNodeRecursive>;
-          })}
+          {data.children &&
+            data.children.map((child, key) => {
+              return <HierarchyNodeRecursive data={child} key={key}></HierarchyNodeRecursive>;
+            })}
         </>
       );
     } else {
       return (
         <div className={`row ${data.type} hierarchy-entry`}>
-          <div className="">{nodeName}</div>
+          <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
+            <div className="">{nodeName}</div>
+          </Link>
           <div className="hierarchy-buttons">
             <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
-              <input className="button button-clear button-inline" type="submit" value="Edit" />
+              <FontAwesomeIcon icon={faPenToSquare} />
             </Link>
             <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
-              <input className="button button-clear button-inline" type="submit" value="Show" />
+              <FontAwesomeIcon icon={faRectangleList} />
             </Link>
           </div>
         </div>

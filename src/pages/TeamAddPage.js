@@ -16,9 +16,9 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
       };
     }
 
-    if (!team.email) {
+    if (!team.email && team.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
-        message: 'Email is required.',
+        message: 'A valid email is required.',
       };
     }
 
@@ -49,6 +49,7 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
             onChange={(e) => {
               onChangeTeam({ name: e.target.value });
             }}
+            autoFocus
           />
           {errors.name && <label className="error-message">{errors.name.message}</label>}
         </div>
@@ -74,7 +75,8 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
         <div className="column column-20 column-offset-80">
           <button
             className="form-button"
-            type="primary"
+            type="button"
+            title="Add New Team"
             onClick={(e) => {
               if (!isValidData(team)) return;
 

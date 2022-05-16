@@ -1,3 +1,4 @@
+import { EMAIL_VALIDATION_REGEX, PHONE_VALIDATION_REGEX } from '../utils/constants';
 import React, { useEffect, useState } from 'react';
 
 import { getAllowedTeams } from '../services/dataService';
@@ -41,15 +42,15 @@ export const EmployeeEditPage = ({
       };
     }
 
-    if (!employee.email) {
+    if (!employee.email && employee.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
-        message: 'Email is required.',
+        message: 'A valid email is required.',
       };
     }
 
-    if (!employee.phone) {
+    if (!employee.phone && employee.phone.match(PHONE_VALIDATION_REGEX)) {
       errors.phone = {
-        message: 'Phone is required.',
+        message: 'A phone number in +XX XXXXX XXXXX format is required.',
       };
     }
 
@@ -142,7 +143,8 @@ export const EmployeeEditPage = ({
           <div className="column">
             <button
               className="form-button"
-              type="primary"
+              type="button"
+              title="Save Employee Details"
               onClick={(e) => {
                 // Check for field validations return on failure
                 if (!isValidData(employee)) return;
@@ -153,23 +155,21 @@ export const EmployeeEditPage = ({
             >
               Save
             </button>
-          </div>
-          <div className="column">
             <button
-              className="form-button"
-              type="primary"
+              className="button button-outline form-button"
+              type="button"
+              title="Reset Edits"
               onClick={(e) => {
                 onResetEmployee();
               }}
             >
               Reset
             </button>
-          </div>
-          {showPromote && (
-            <div className="column">
+            {showPromote && (
               <button
                 className="form-button"
-                type="primary"
+                type="button"
+                title="Promote to Next Level"
                 onClick={(e) => {
                   // Check for field validations return on failure
                   if (!isValidData(employee)) return;
@@ -181,13 +181,12 @@ export const EmployeeEditPage = ({
               >
                 Promote
               </button>
-            </div>
-          )}
-          {showDelete && (
-            <div className="column">
+            )}
+            {showDelete && (
               <button
                 className="form-button"
-                type="danger"
+                type="button"
+                title="Delete Employee"
                 onClick={(e) => {
                   onRemoveEmployee(employee).then((response) => {
                     if (response && response.data === 'error') {
@@ -201,8 +200,8 @@ export const EmployeeEditPage = ({
               >
                 Delete
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className="row">
           {formMessage && (
@@ -219,12 +218,12 @@ export const EmployeeEditPage = ({
             </h4>
           </div>
           <div className="row">
-            <div className="column column-20">
-              <label className="form-label">Move to:</label>
+            <div className="column column-10">
+              <label className="form-label">To:</label>
             </div>
-            <div className="column column-80">
+            <div className="column column-70">
               <select
-                style={{ width: 400, marginRight: 10 }}
+                style={{ width: 250, marginRight: 10 }}
                 onChange={(e) => {
                   setNewTeamId(e.target.value);
                 }}
@@ -236,12 +235,11 @@ export const EmployeeEditPage = ({
                 ))}
               </select>
             </div>
-          </div>
-          <div className="row">
-            <div className="column column-20 column-offset-20">
+            <div className="column column-25">
               <button
                 className="form-button"
-                type="primary"
+                type="button"
+                title="Move Employee"
                 onClick={(e) => {
                   if (newTeamId) {
                     onMoveEmployee(newTeamId);

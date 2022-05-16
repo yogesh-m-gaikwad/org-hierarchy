@@ -20,9 +20,9 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
       };
     }
 
-    if (!team.email) {
+    if (!team.email && team.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
-        message: 'Email is required.',
+        message: 'A valid email is required.',
       };
     }
 
@@ -77,10 +77,11 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
         </div>
       </div>
       <div className="row">
-        <div className="column column-offset-20">
+        <div className="column  column-25 column-offset-10">
           <button
             className="form-button"
-            type="primary"
+            type="button"
+            title="Save Team Details"
             onClick={(e) => {
               // Check for field validations return on failure
               if (!isValidData(team)) return;
@@ -93,10 +94,11 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
             Save
           </button>
         </div>
-        <div className="column">
+        <div className="column column-25">
           <button
-            className="form-button"
-            type="primary"
+            className="button button-outline form-button"
+            type="button"
+            title="Reset Team Details"
             onClick={(e) => {
               onResetTeam();
             }}
@@ -104,10 +106,11 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
             Reset
           </button>
         </div>
-        <div className="column">
+        <div className="column  column-25">
           <button
             className="form-button"
-            type="danger"
+            type="button"
+            title="Delete Team"
             onClick={(e) => {
               onRemoveTeam(team).then((response) => {
                 if (response && response.data === 'error') {

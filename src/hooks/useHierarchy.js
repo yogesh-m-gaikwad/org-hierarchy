@@ -1,7 +1,7 @@
 import { employeesData, teamsData } from '../services/dataService';
+import { filterHierarchyData, generateHierarchy } from '../utils/utils';
 
 import HierarchyContext from './HierarchyContext';
-import { generateHierarchy } from '../utils/utils';
 import { useContext } from 'react';
 
 /**
@@ -15,5 +15,9 @@ export const useHierarchy = () => {
     setHierarchy(generateHierarchy(employeesData, teamsData));
   };
 
-  return [hierarchy, setHierarchy, reloadHierarchy];
+  const filterHierarchy = (filterString) => {
+    setHierarchy(filterHierarchyData(employeesData, teamsData, filterString));
+  };
+
+  return [hierarchy, setHierarchy, reloadHierarchy, filterHierarchy];
 };

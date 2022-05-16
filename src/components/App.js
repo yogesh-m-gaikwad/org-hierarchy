@@ -36,7 +36,6 @@ const App = () => {
           <div
             className="column page-content"
             style={{
-              padding: 24,
               margin: 24,
             }}
           >

@@ -10,18 +10,22 @@ const TeamDetailsPage = ({ team }) => {
         <h4 className="form-title">Team Information</h4>
       </div>
       <div className="row">
-        <p>ID: {team._id}</p>
+        <div className="column column-20 title">ID:</div>
+        <div className="column column-80">{team._id}</div>
       </div>
       <div className="row">
-        <p>Name: {team.name}</p>
+        <div className="column column-20 title">Name:</div>
+        <div className="column column-80">{team.name}</div>
       </div>
       <div className="row">
-        <p>Email: {team.email}</p>
+        <div className="column column-20 title">Email:</div>
+        <div className="column column-80">{team.email}</div>
       </div>
       <div className="row">
         <button
           className="form-button"
-          type="primary"
+          type="button"
+          title="Add Team Member"
           onClick={(e) => {
             // send blank employee in state to allow for add page load
             navigate(`/add/employee/${team._id}`, {
@@ -31,6 +35,20 @@ const TeamDetailsPage = ({ team }) => {
           }}
         >
           Add Team Member
+        </button>
+        <button
+          className="form-button"
+          type="button"
+          title="Edit Team Details"
+          onClick={(e) => {
+            // send blank employee in state to allow for add page load
+            navigate(`/edit/team/${team._id}`, {
+              state: { team },
+              replace: false,
+            });
+          }}
+        >
+          Edit
         </button>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+import { isEmpty } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
 
 /**
@@ -8,6 +9,7 @@ import { useHierarchy } from '../hooks/useHierarchy';
  **/
 const HierarchyLoader = ({ getData = async () => {}, children }) => {
   const [data, setData] = useHierarchy();
+  const validData = !isEmpty(data);
 
   useEffect(() => {
     (async () => {
@@ -16,7 +18,7 @@ const HierarchyLoader = ({ getData = async () => {}, children }) => {
     })();
   }, [getData]);
 
-  return (
+  return validData ? (
     <>
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
@@ -25,6 +27,8 @@ const HierarchyLoader = ({ getData = async () => {}, children }) => {
         return child;
       })}
     </>
+  ) : (
+    <div className={`row main hierarchy-entry`}>No match found.</div>
   );
 };
 

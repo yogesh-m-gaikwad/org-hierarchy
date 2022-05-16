@@ -17,7 +17,8 @@
     "type": "head",
     "department": "hr",
     "parent_id": "1001",
-    "teams": ["T1001", "T1002", "T1003"]
+    "teams": ["T1001", "T1002", "T1003"],
+    "order": 1
   },
   {
     "_id": "1003",
@@ -28,7 +29,8 @@
     "type": "head",
     "department": "engineering",
     "parent_id": "1001",
-    "teams": ["T1005"]
+    "teams": ["T1005"],
+    "order": 3
   },
   {
     "_id": "1004",
@@ -39,7 +41,8 @@
     "type": "head",
     "department": "design",
     "parent_id": "1001",
-    "teams": ["T1004"]
+    "teams": ["T1004"],
+    "order": 2
   },
   {
     "_id": "1008",

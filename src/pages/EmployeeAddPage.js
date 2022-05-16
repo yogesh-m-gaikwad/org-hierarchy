@@ -16,15 +16,15 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
       };
     }
 
-    if (!employee.email) {
+    if (!employee.email && employee.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
-        message: 'Email is required.',
+        message: 'A valid email is required.',
       };
     }
 
-    if (!employee.phone) {
+    if (!employee.phone && employee.phone.match(PHONE_VALIDATION_REGEX)) {
       errors.phone = {
-        message: 'Phone is required.',
+        message: 'A phone number in +XX XXXXX XXXXX format is required.',
       };
     }
 
@@ -61,6 +61,7 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
             onChange={(e) => {
               onChangeEmployee({ name: e.target.value });
             }}
+            autoFocus
           />
           {errors.name && <label className="error-message">{errors.name.message}</label>}
         </div>
@@ -116,10 +117,11 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
         </div>
       </div>
       <div className="row">
-        <div className="column column-20 column-offset-80">
+        <div className="column column-20 column-offset-10">
           <button
             className="form-button"
-            type="primary"
+            type="button"
+            title="Add New Employee"
             onClick={(e) => {
               if (!isValidData(employee)) return;
 
