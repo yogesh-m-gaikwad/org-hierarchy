@@ -20,7 +20,7 @@ const App = () => {
         <div className="row header">
           <div className="column">
             <Link to={`/`}>
-              <h3>Hierarchy UI - Demo</h3>
+              <h3>Hierarchy UI</h3>
             </Link>
           </div>
         </div>

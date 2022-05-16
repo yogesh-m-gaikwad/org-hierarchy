@@ -1,10 +1,10 @@
-import { faPenToSquare, faRectangleList, faSquarePlus } from '@fortawesome/free-regular-svg-icons';
-import { isEmpty, isObject } from '../utils/utils';
+import { faPenToSquare, faRectangleList } from '@fortawesome/free-regular-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { isObject } from '../utils/utils';
 
 const HierarchyNodeRecursive = ({ data }) => {
   if (isObject(data)) {
@@ -29,11 +29,9 @@ const HierarchyNodeRecursive = ({ data }) => {
             </div>
             <div className="hierarchy-buttons">
               <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
-                {/* <input className="button button-clear button-inline" type="submit" value="Edit" /> */}
                 <FontAwesomeIcon icon={faPenToSquare} />
               </Link>
               <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
-                {/* <input className="button button-clear button-inline" type="submit" value="Show" /> */}
                 <FontAwesomeIcon icon={faRectangleList} />
               </Link>
             </div>
