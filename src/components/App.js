@@ -1,79 +1,72 @@
-import 'antd/dist/antd.css';
-
-import { Layout, Space, Typography } from 'antd';
+import { Link, Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
-import EditTeamPage from '../pages/EditTeamPage';
 import EmployeePageLoader from './EmployeePageLoader';
 import FilterBar from './FilterBar';
 import HierarchyContext from '../hooks/HierarchyContext';
 import HierarchyLoader from './HierarchyLoader';
 import HierarchyNodeRecursive from './HierarchyNodeRecursive';
-import TeamDetailsPage from '../pages/TeamDetailsPage';
 import TeamMebmersListPage from '../pages/TeamMembersListPage';
+import TeamPageLoader from './TeamPageLoader';
+import WelcomePage from '../pages/WelcomePage';
 import { fetchDataFromLocalstorage } from '../services/dataService';
-
-const { Header, Content, Footer, Sider } = Layout;
-const { Title } = Typography;
 
 const App = () => {
   const [hierarchy, setHierarchy] = useState(null);
 
   return (
     <HierarchyContext.Provider value={{ hierarchy, setHierarchy }}>
-      <Layout className="main-layout">
-        <Header className="header">
-          <Title level={3} style={{ color: '#ffffff', paddingTop: 15 }}>
-            Hierarchy UI - Demo
-          </Title>
-        </Header>
-        <Layout>
-          <Sider
-            width={400}
-            className="site-layout-background"
-            style={{
-              padding: 10,
-              overflowX: 'hidden',
-              overflowY: 'hidden',
-            }}
-          >
+      <div className="container main-layout">
+        <div className="row header">
+          <div className="column">
+            <Link to={`/`}>
+              <h3>Hierarchy UI - Demo</h3>
+            </Link>
+          </div>
+        </div>
+        <div className="row content">
+          <div className="column sidebar">
             <FilterBar></FilterBar>
-            <Space direction="verticle" align="top" className="hierarchy-container">
+            <div className="row hierarchy-container">
               <HierarchyLoader getData={fetchDataFromLocalstorage}>
                 <HierarchyNodeRecursive />
               </HierarchyLoader>
-            </Space>
-          </Sider>
-          <Content
-            className="site-layout-background"
+            </div>
+          </div>
+          <div
+            className="column page-content"
             style={{
               padding: 24,
               margin: 24,
-              minHeight: 280,
             }}
           >
             <Routes>
+              <Route path="/" element={<WelcomePage />} />
               <Route path="/employee/:employeeId" element={<EmployeePageLoader mode="show" />} />
-              <Route path="/allteam/:employeeId" element={<TeamMebmersListPage />} />
-              <Route path="/team/:teamId" element={<TeamDetailsPage />} />
               <Route
                 path="/edit/employee/:employeeId"
                 element={<EmployeePageLoader mode="edit" />}
               />
-              <Route path="/edit/team/:teamId" element={<EditTeamPage />} />
+              <Route path="/add/employee/:teamId" element={<EmployeePageLoader mode="add" />} />
+
+              <Route path="/team/:teamId" element={<TeamPageLoader mode="show" />} />
+              <Route path="/edit/team/:teamId" element={<TeamPageLoader mode="edit" />} />
+              <Route path="/add/team/:managerId" element={<TeamPageLoader mode="add" />} />
+
+              <Route path="/team/list/:id" element={<TeamMebmersListPage />} />
             </Routes>
-          </Content>
-        </Layout>
-        <Footer
+          </div>
+        </div>
+        <div
+          className="footer-row"
           style={{
             textAlign: 'right',
             borderTop: '1px solid rgba(155, 165, 182, 0.3)',
           }}
         >
-          Developed by: Yogesh M. Gaikwad
-        </Footer>
-      </Layout>
+          <div className="footer">Developed by: Yogesh M. Gaikwad</div>
+        </div>
+      </div>
     </HierarchyContext.Provider>
   );
 };

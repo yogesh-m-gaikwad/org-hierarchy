@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import { isEmpty, isObject } from '../utils/utils';
-import { EditOutlined, IdcardOutlined } from '@ant-design/icons';
+
+import { Link } from 'react-router-dom';
+import React from 'react';
 
 const HierarchyNodeRecursive = ({ data }) => {
   if (isObject(data)) {
-    const nodeName = `${data.name} ${data.role ? '(' + data.role + ')' : ''}`;
+    const nodeName = `${data.name} ${data.position ? '(' + data.position + ')' : ''}`;
     let editUrl = `/edit/employee/${data._id}`;
     let showUrl = `/employee/${data._id}`;
 
@@ -17,30 +17,34 @@ const HierarchyNodeRecursive = ({ data }) => {
     if (!isEmpty(data.children)) {
       return (
         <>
-          <div className={data.type}>
-            {nodeName}
-            <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
-              <EditOutlined />
-            </Link>
-            <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
-              <IdcardOutlined />
-            </Link>
-            {data.children.map((child, key) => {
-              return <HierarchyNodeRecursive data={child} key={key}></HierarchyNodeRecursive>;
-            })}
+          <div className={`row ${data.type} hierarchy-entry`}>
+            <div className="">{nodeName}</div>
+            <div className="hierarchy-buttons">
+              <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
+                <input className="button button-clear button-inline" type="submit" value="Edit" />
+              </Link>
+              <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
+                <input className="button button-clear button-inline" type="submit" value="Show" />
+              </Link>
+            </div>
           </div>
+          {data.children.map((child, key) => {
+            return <HierarchyNodeRecursive data={child} key={key}></HierarchyNodeRecursive>;
+          })}
         </>
       );
     } else {
       return (
-        <div className={data.type}>
-          {nodeName}
-          <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
-            <EditOutlined />
-          </Link>
-          <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
-            <IdcardOutlined />
-          </Link>
+        <div className={`row ${data.type} hierarchy-entry`}>
+          <div className="">{nodeName}</div>
+          <div className="hierarchy-buttons">
+            <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
+              <input className="button button-clear button-inline" type="submit" value="Edit" />
+            </Link>
+            <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
+              <input className="button button-clear button-inline" type="submit" value="Show" />
+            </Link>
+          </div>
         </div>
       );
     }

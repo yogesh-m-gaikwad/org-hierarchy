@@ -1,17 +1,25 @@
-import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Button, Input, Space } from 'antd';
 import React from 'react';
+import { useHierarchy } from '../hooks/useHierarchy';
 
 const FilterBar = () => {
+  const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   return (
-    <Space direction="horizontal" align="center" className="filter-bar">
-      <Input
-        placeholder="Enter search string..."
-        suffix={<FilterOutlined />}
-        style={{ minWidth: 332 }}
-      />
-      <Button type="primary" icon={<ReloadOutlined />} onClick={() => {}} />
-    </Space>
+    <div direction="horizontal" align="center" className="row filter-bar">
+      <div className="column-80">
+        <input id="filter-hierarchy" className="filter" placeholder="Enter search string..." />
+      </div>
+      <div className="column-10 column-offset-10">
+        <button
+          id="refresh"
+          type="primary"
+          onClick={() => {
+            reloadHierarchy();
+          }}
+        >
+          Refresh
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@
     "name": "Team Alpha",
     "email": "teamalpha@hierarchy.org",
     "type": "team",
+    "department": "hr",
     "manager_id": "1002"
   },
   {
@@ -11,6 +12,7 @@
     "name": "Team Beta",
     "email": "teambeta@hierarchy.org",
     "type": "team",
+    "department": "hr",
     "manager_id": "1002"
   },
   {
@@ -18,6 +20,7 @@
     "name": "Team Xeta",
     "email": "teamxeta@hierarchy.org",
     "type": "team",
+    "department": "hr",
     "manager_id": "1002"
   },
   {
@@ -25,6 +28,7 @@
     "name": "Team Design 01",
     "email": "teamdesign01@hierarchy.org",
     "type": "team",
+    "department": "design",
     "manager_id": "1004"
   },
   {
@@ -32,6 +36,7 @@
     "name": "Team Engineer 01",
     "email": "teameng01@hierarchy.org",
     "type": "team",
+    "department": "engineering",
     "manager_id": "1003"
   }
 ]

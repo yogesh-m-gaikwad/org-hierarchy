@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --mode=development --open --hot",
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=production --config prod.config.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "test": "jest"
@@ -29,10 +29,9 @@
   "author": "Yogesh Gaikwad",
   "license": "ISC",
   "dependencies": {
-    "@ant-design/icons": "^4.7.0",
-    "antd": "^4.20.4",
     "gh-pages": "^4.0.0",
     "jest-environment-jsdom": "^28.1.0",
+    "milligram": "^1.4.1",
     "prop-types": "^15.8.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",

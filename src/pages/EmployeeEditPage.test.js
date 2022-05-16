@@ -24,7 +24,7 @@ it('renders form with id, name, email and phone fields', () => {
     employee: {
       _id: '1016',
       name: 'Vishu',
-      role: 'HR',
+      position: 'HR',
       email: 'vishu@hierarchy.org',
       phone: '+022878978463',
       type: 'member',
