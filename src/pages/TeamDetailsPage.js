@@ -26,6 +26,7 @@ const TeamDetailsPage = ({ team }) => {
         <div className="column column-20 title">Email:</div>
         <div className="column column-80">{team.email}</div>
       </div>
+      <br></br>
       <div className="row">
         <button
           className="form-button"

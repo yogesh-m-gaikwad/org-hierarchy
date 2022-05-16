@@ -60,11 +60,11 @@ export const EmployeeEditPage = ({
 
     if (!employee.phone || !employee.phone.match(PHONE_VALIDATION_REGEX)) {
       errors.phone = {
-        message: 'A phone number in +XX XXXXX XXXXX format is required.',
+        message: 'A phone number in [+]XXXXXXXXXXXX format is required.',
       };
     }
 
-    if (!employee.position || employee.name.length < 3 || employee.name.length > 50) {
+    if (!employee.position || employee.position.length < 3 || employee.position.length > 50) {
       errors.position = {
         message: 'Position text is required min 3 & max 50 characters.',
       };
@@ -155,6 +155,7 @@ export const EmployeeEditPage = ({
             {errors.position && <label className="error-message">{errors.position.message}</label>}
           </div>
         </div>
+        <br></br>
         <div className="row">
           <div className="column">
             <button
@@ -221,7 +222,7 @@ export const EmployeeEditPage = ({
         </div>
         <div className="row">
           {formMessage && (
-            <label className={`${formMessage.type}-message`}>{formMessage.text}</label>
+            <label className={`${formMessage.type}-message form-message`}>{formMessage.text}</label>
           )}
         </div>
       </div>
@@ -235,11 +236,11 @@ export const EmployeeEditPage = ({
           </div>
           <div className="row">
             <div className="column column-10">
-              <label className="form-label">To:</label>
+              <label className="form-label">Team:</label>
             </div>
             <div className="column column-70">
               <select
-                style={{ width: 250, marginRight: 10 }}
+                style={{ width: 350, marginRight: 10 }}
                 onChange={(e) => {
                   setNewTeamId(e.target.value);
                 }}

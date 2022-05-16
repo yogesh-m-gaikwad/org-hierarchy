@@ -45,7 +45,10 @@ const WelcomePage = () => {
             <FontAwesomeIcon icon={faArrowsRotate} /> &nbsp;button to refresh the hierarchy.
           </li>
           <li>
-            To reset to original state click:
+            To reset to original state click restore data link.
+            <i style={{ padding: 0 }}>
+              Note: this will revert all your changes cached in browser storage.
+            </i>
             <input
               className="button button-clear"
               type="submit"

@@ -55,7 +55,13 @@ export const EmployeePageLoader = (props) => {
           );
         }
       } else {
-        return <div id="loading" />;
+        return (
+          <div className="container">
+            <div className="row">
+              <h4 className="form-title">No record found.</h4>
+            </div>
+          </div>
+        );
       }
     },
     params.employeeId,

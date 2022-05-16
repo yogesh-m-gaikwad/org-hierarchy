@@ -42,6 +42,7 @@ const FilterBar = () => {
           placeholder="Enter filter text..."
           value={filterString}
           onChange={handleChange}
+          autoFocus
         />
       </div>
       <div className="column-10 column-offset-10">

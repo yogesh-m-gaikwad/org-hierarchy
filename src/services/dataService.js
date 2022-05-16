@@ -54,10 +54,19 @@ export const fetchDataFromLocalStorage = async () => {
   return generateHierarchy(employeesData, teamsData);
 };
 
+/**
+ * Fetch employee using employee Id.
+ * @param {*} employeeId
+ * @returns The employee matching the provided id.
+ */
 export const getEmployeeById = async (employeeId) => {
   return employeesData.hasOwnProperty(employeeId) ? { data: employeesData[employeeId] } : {};
 };
 
+/**
+ * Add new employee to DB (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const addEmployee = async (employee, teamId) => {
   // Add employee in global variable and local storage storage to simulate db
   if (employee._id == '') {
@@ -74,6 +83,10 @@ export const addEmployee = async (employee, teamId) => {
   return { data: employeesData[employee._id] };
 };
 
+/**
+ * Update employee to DB (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const updateEmployee = async (employee) => {
   // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
@@ -84,6 +97,10 @@ export const updateEmployee = async (employee) => {
   return { data: employeesData[employee._id] };
 };
 
+/**
+ * Move employee new team (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const moveEmployee = async (employee, newTeamId) => {
   let teamLeaderId = getTeamLeaderId(newTeamId);
 
@@ -96,6 +113,10 @@ export const moveEmployee = async (employee, newTeamId) => {
   return { data: employeesData[employee._id] };
 };
 
+/**
+ * Promote a team leader (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const promoteTeamLeader = async (employee, deleteFlag, employeesData) => {
   let responseTeam = await getTeamById(employee.parent_id);
   let oldTeam = responseTeam.data;
@@ -138,6 +159,11 @@ export const promoteTeamLeader = async (employee, deleteFlag, employeesData) => 
   }
 };
 
+/**
+ * Promote an employee to next level.
+ * @param {*} employee
+ * @returns Promoted employee or error.
+ */
 export const promoteEmployee = async (employee) => {
   // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
@@ -226,6 +252,10 @@ export const promoteEmployee = async (employee) => {
   return { data: employeesData[employee._id] };
 };
 
+/**
+ * Delete employee from DB (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const deleteEmployee = async (employee) => {
   // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
@@ -246,8 +276,24 @@ export const deleteEmployee = async (employee) => {
       delete employeesData[employee._id];
       localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
       return { data: 'success', message: 'Successfully deleted team leader and members.' };
+    } else if (employeesData[employee._id].type == TEAM_HEAD) {
+      if (employeesData[employee._id].teams.length === 0) {
+        delete employeesData[employee._id];
+        localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
+        return { data: 'success', message: 'Successfully deleted employee.' };
+      } else {
+        return {
+          data: 'error',
+          message:
+            'You can only delete team lead and members. Promote a existing team leader from child teams to remove department head.',
+        };
+      }
     } else {
-      return { data: 'error', message: 'You can only delete team members.' };
+      return {
+        data: 'error',
+        message:
+          'You can only delete team lead and members. Promote a existing team leader from child teams to remove department head.',
+      };
     }
   }
 
@@ -258,6 +304,11 @@ export const getTeamById = async (teamId) => {
   return teamsData.hasOwnProperty(teamId) ? { data: teamsData[teamId] } : {};
 };
 
+/**
+ * Fetch the team leader for a given team.
+ * @param {*} teamId
+ * @returns Team leader or null if not found.
+ */
 export const getTeamLeaderId = (teamId) => {
   let teamLeader = filter(employeesData, (e) => e.parent_id === teamId);
   let keys = Object.keys(teamLeader);
@@ -267,6 +318,11 @@ export const getTeamLeaderId = (teamId) => {
   return null;
 };
 
+/**
+ * Fetch a random team leader.
+ * @param {*} managerId
+ * @returns Random team leader id or null if none found.
+ */
 export const getRandomTeamLeader = (managerId) => {
   for (const teamId of employeesData[managerId].teams) {
     let teamLeaderId = getTeamLeaderId(teamId);
@@ -276,6 +332,10 @@ export const getRandomTeamLeader = (managerId) => {
   return null;
 };
 
+/**
+ * Add new team to DB (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const addTeam = async (team) => {
   // Add team in global variable and local storage storage to simulate db
   if (team._id === '') {
@@ -295,6 +355,10 @@ export const addTeam = async (team) => {
   return { data: teamsData[team._id] };
 };
 
+/**
+ * Update team to DB (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const updateTeam = async (team) => {
   // Update the team data in global variable and local storage storage to simulate db
   if (teamsData.hasOwnProperty(team._id)) {
@@ -305,13 +369,24 @@ export const updateTeam = async (team) => {
   return { data: teamsData[team._id] };
 };
 
+/**
+ * Delete team from DB (mocked using local storage for demo)
+ * Real methods will call database services.
+ */
 export const deleteTeam = async (team) => {
   // Update the team data in global variable and local storage storage to simulate db
   if (teamsData.hasOwnProperty(team._id)) {
     // only delete team member
-    if (!hasTeamAnyMembers(team._id)) {
+    let hasTeamMembers = await hasTeamAnyMembers(team._id);
+    if (!hasTeamMembers) {
+      employeesData[team.manager_id].teams = employeesData[team.manager_id].teams.filter(
+        (t) => t != team._id
+      );
+
       delete teamsData[team._id];
+
       localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
+      localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
       return { data: 'success', message: 'Successfully deleted team.' };
     } else {
       return { data: 'error', message: 'You can only delete teams without any members.' };
@@ -321,6 +396,9 @@ export const deleteTeam = async (team) => {
   return { data: 'error', message: 'Invalid Team Id' };
 };
 
+/**
+ * Filter teams to which current employee can be assigned to.
+ */
 export const getAllowedTeams = async (employeeId) => {
   if (employeeId) {
     let parentTeamId = await getTeamId(employeeId);
@@ -339,6 +417,11 @@ export const getAllowedTeams = async (employeeId) => {
   return [];
 };
 
+/**
+ * Check if the given team has any members.
+ * @param {*} teamId
+ * @returns true if team has any members, false otherwise.
+ */
 export const hasTeamAnyMembers = async (teamId) => {
   if (teamId) {
     let filteredEmployees = filter(employeesData, (e) => e.parent_id === teamId);
@@ -350,6 +433,11 @@ export const hasTeamAnyMembers = async (teamId) => {
   return false;
 };
 
+/**
+ * Get department for given team id.
+ * @param {*} teamId
+ * @returns department string.
+ */
 const getDepartment = (teamId) => {
   if (teamsData.hasOwnProperty(teamId)) {
     return teamsData[teamId].department;
@@ -358,6 +446,12 @@ const getDepartment = (teamId) => {
   return null;
 };
 
+/**
+ * Returns excluded team for given department.
+ * Used to check if the current team is excluded for move.
+ * @param {*} department
+ * @returns Array of departments excluded for movement.
+ */
 const getExcludedTransitions = (department) => {
   if (department === 'hr') {
     return ['design'];
@@ -366,6 +460,11 @@ const getExcludedTransitions = (department) => {
   return [];
 };
 
+/**
+ * Get team for an employee.
+ * @param {*} employeeId
+ * @returns team id.
+ */
 export const getTeamId = async (employeeId) => {
   let response = await getEmployeeById(employeeId);
   let employee = response.data;
@@ -382,6 +481,11 @@ export const getTeamId = async (employeeId) => {
   return null;
 };
 
+/**
+ * Get team members list.
+ * @param {*} id
+ * @returns List of team members reporting to given id.
+ */
 export const getTeamMembersData = (id) => {
   let employee = employeesData.hasOwnProperty(id) ? employeesData[id] : null;
   if (employee) {

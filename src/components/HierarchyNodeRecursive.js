@@ -1,11 +1,11 @@
+import { ORG_MAIN, TEAM, TEAM_HEAD, TEAM_LEADER } from '../utils/constants';
 import { faPenToSquare, faRectangleList } from '@fortawesome/free-regular-svg-icons';
+import { getTruncateLength, isObject } from '../utils/utils';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { TEAM } from '../utils/constants';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
-import { isObject } from '../utils/utils';
 
 /**
  * Loads the hierarchy recursively based on the json structure passed.
@@ -22,8 +22,7 @@ const HierarchyNodeRecursive = ({ data }) => {
     let editUrl = `/edit/employee/${data._id}`;
     let showUrl = `/employee/${data._id}`;
 
-    // let truncateAt =
-    //   data.type === ORG_MAIN ? 24 : data.type === TEAM_HEAD ? 20 : data.type === TEAM ? 18 : 16;
+    let truncateAt = getTruncateLength(data.type);
 
     if (data.type === TEAM) {
       editUrl = `/edit/team/${data._id}`;
@@ -37,14 +36,22 @@ const HierarchyNodeRecursive = ({ data }) => {
             <div className="">
               <FontAwesomeIcon icon={faCaretRight} style={{ paddingRight: 10, paddingBottom: 0 }} />
               <Link to={{ pathname: showUrl, state: { employee: data } }}>
-                {truncate(nodeName, 28)}
+                {truncate(nodeName, truncateAt)}
               </Link>
             </div>
             <div className="hierarchy-buttons">
-              <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
+              <Link
+                className="action-icon"
+                title="Edit"
+                to={{ pathname: editUrl, state: { employee: data } }}
+              >
                 <FontAwesomeIcon icon={faPenToSquare} />
               </Link>
-              <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
+              <Link
+                className="action-icon"
+                title="Show Details"
+                to={{ pathname: showUrl, state: { employee: data } }}
+              >
                 <FontAwesomeIcon icon={faRectangleList} />
               </Link>
             </div>
@@ -62,10 +69,18 @@ const HierarchyNodeRecursive = ({ data }) => {
             <div className="">{truncate(nodeName, 28)}</div>
           </Link>
           <div className="hierarchy-buttons">
-            <Link className="action-icon" to={{ pathname: editUrl, state: { employee: data } }}>
+            <Link
+              className="action-icon"
+              title="Edit"
+              to={{ pathname: editUrl, state: { employee: data } }}
+            >
               <FontAwesomeIcon icon={faPenToSquare} />
             </Link>
-            <Link className="action-icon" to={{ pathname: showUrl, state: { employee: data } }}>
+            <Link
+              className="action-icon"
+              title="Show Details"
+              to={{ pathname: showUrl, state: { employee: data } }}
+            >
               <FontAwesomeIcon icon={faRectangleList} />
             </Link>
           </div>

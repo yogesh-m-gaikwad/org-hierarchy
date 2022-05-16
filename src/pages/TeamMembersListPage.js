@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { getEmployeeById, getTeamMembersData } from '../services/dataService';
 
-import { getTeamMembersData } from '../services/dataService';
 import { useParams } from 'react-router-dom';
 
 /**
@@ -11,15 +11,22 @@ import { useParams } from 'react-router-dom';
 const TeamMembersListPage = () => {
   let params = useParams();
   const [employees, setEmployees] = useState([]);
+  const [pageTitle, setPageTitle] = useState([]);
   useEffect(() => {
     (async () => {
       const teamMembers = getTeamMembersData(params.id);
+      const response = await getEmployeeById(params.id);
+      const employee = response.data;
+      setPageTitle(`Employees List - ${employee.name} (${employee.position})`);
       setEmployees(teamMembers);
     })();
   }, []);
 
   return (
     <>
+      <div>
+        <h4>{pageTitle}</h4>
+      </div>
       <table>
         <thead>
           <tr>

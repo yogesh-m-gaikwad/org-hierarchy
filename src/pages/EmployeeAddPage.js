@@ -30,11 +30,11 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
 
     if (!employee.phone || !employee.phone.match(PHONE_VALIDATION_REGEX)) {
       errors.phone = {
-        message: 'A phone number in +XX XXXX XXXX format is required.',
+        message: 'A phone number in [+]XXXXXXXXXXXX format is required.',
       };
     }
 
-    if (!employee.position || employee.name.length < 3 || employee.name.length > 50) {
+    if (!employee.position || employee.position.length < 3 || employee.position.length > 50) {
       errors.position = {
         message: 'Position text is required min 3 & max 50 characters.',
       };
@@ -122,8 +122,9 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
           {errors.position && <label className="error-message">{errors.position.message}</label>}
         </div>
       </div>
+      <br></br>
       <div className="row">
-        <div className="column column-20 column-offset-10">
+        <div className="column column-20 column-offset-20">
           <button
             className="form-button"
             type="button"

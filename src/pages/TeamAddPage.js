@@ -40,7 +40,7 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
   return (
     <div className="container">
       <div className="row">
-        <h4 className="form-label form-title">Add New Team</h4>
+        <h4 className="form-label form-title">Add New Team ({employee.position})</h4>
       </div>
       <div className="row">
         <div className="column column-20">
@@ -77,6 +77,7 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
           {errors.email && <label className="error-message">{errors.email.message}</label>}
         </div>
       </div>
+      <br></br>
       <div className="row">
         <div className="column column-20 column-offset-80">
           <button

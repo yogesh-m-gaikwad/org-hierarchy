@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 export const EmployeeDetailsPage = ({ employee }) => {
   let navigate = useNavigate();
   let showListButton = employee.type === ORG_MAIN || employee.type === TEAM_HEAD;
+
   return (
     <div className="container">
       <div className="row">
@@ -31,13 +32,14 @@ export const EmployeeDetailsPage = ({ employee }) => {
         </div>
         <div className="row">
           <div className="column column-20 title">Email:</div>
-          <div className="column column-80">{employee._id}</div>
+          <div className="column column-80">{employee.email}</div>
         </div>
         <div className="row">
           <div className="column column-20 title">Phone:</div>
           <div className="column column-80">{employee.phone}</div>
         </div>
       </div>
+      <br></br>
       <div className="row">
         {employee.type === TEAM_HEAD && (
           <>

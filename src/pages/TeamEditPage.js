@@ -82,8 +82,9 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
           {errors.email && <label className="error-message">{errors.email.message}</label>}
         </div>
       </div>
+      <br></br>
       <div className="row">
-        <div className="column  column-25 column-offset-10">
+        <div className="column  column-25 column-offset-20">
           <button
             className="form-button"
             type="button"
@@ -132,7 +133,9 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
         </div>
       </div>
       <div className="row">
-        {formMessage && <label className={`${formMessage.type}-message`}>{formMessage.text}</label>}
+        {formMessage && (
+          <label className={`${formMessage.type}-message form-message`}>{formMessage.text}</label>
+        )}
       </div>
     </div>
   );
