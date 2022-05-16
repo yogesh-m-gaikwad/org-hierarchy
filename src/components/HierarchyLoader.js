@@ -4,8 +4,8 @@ import { isEmpty } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
 
 /**
- * This is HOC to load the hierarchy data using the getData fuction passed and pass that data
- * to the chidren on data property to use for further rendering.
+ * This is HOC to load the hierarchy data using the getData function passed and pass that data
+ * to the children on data property to use for further rendering.
  **/
 const HierarchyLoader = ({ getData = async () => {}, children }) => {
   const [data, setData] = useHierarchy();

@@ -5,41 +5,41 @@ import employees from '../data/employees.json';
 import teams from '../data/teams.json';
 
 /**
- * Using the data varibles as globals only for demo app - to simulate the database transaction
- * In production/real applicatoni these will be fetched from database and all transactions will
+ * Using the data variables as globals only for demo app - to simulate the database transaction
+ * In production/real application these will be fetched from database and all transactions will
  * update the database. In demo updating localStorage data after changes to these global variables.
- * Clearing employees-data and teams-data keys from localstroage will reload data from json files.
+ * Clearing employees-data and teams-data keys from local storage will reload data from json files.
  **/
 export let employeesData = [];
 export let teamsData = [];
 
 /**
- * Fetch the data from localstorage if available or load from json and use it to
+ * Fetch the data from local storage if available or load from json and use it to
  * generate a hierarchy used by the tree structure. This code can be moved to backend
- * in real projects to return the hierarcy computed to real data from database.
- * @returns The hierarchy generated after loading data from localstorage or files.
+ * in real projects to return the hierarchy computed to real data from database.
+ * @returns The hierarchy generated after loading data from local storage or files.
  */
-export const fetchDataFromLocalstorage = async () => {
+export const fetchDataFromLocalStorage = async () => {
   let localStorageEmployees = localStorage.getItem(EMPLOYEES_DATA_KEY);
   if (localStorageEmployees === null) {
-    let tranformedEmployes = employees.map((e) => {
+    let transformedEmployees = employees.map((e) => {
       return { [e._id]: { ...e } };
     });
-    tranformedEmployes = Object.assign({}, ...tranformedEmployes);
-    localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(tranformedEmployes));
-    employeesData = tranformedEmployes;
+    transformedEmployees = Object.assign({}, ...transformedEmployees);
+    localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(transformedEmployees));
+    employeesData = transformedEmployees;
   } else {
     employeesData = JSON.parse(localStorageEmployees);
   }
 
   let localStorageTeams = localStorage.getItem(TEAMS_DATA_KEY);
   if (localStorageTeams === null) {
-    let tranformedTeams = teams.map((t) => {
+    let transformedTeams = teams.map((t) => {
       return { [t._id]: { ...t } };
     });
-    tranformedTeams = Object.assign({}, ...tranformedTeams);
-    localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(tranformedTeams));
-    teamsData = tranformedTeams;
+    transformedTeams = Object.assign({}, ...transformedTeams);
+    localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(transformedTeams));
+    teamsData = transformedTeams;
   } else {
     teamsData = JSON.parse(localStorageTeams);
   }
@@ -52,7 +52,7 @@ export const getEmployeeById = async (employeeId) => {
 };
 
 export const addEmployee = async (employee, teamId) => {
-  // Add employee in global variable and localstorage storage to simulate db
+  // Add employee in global variable and local storage storage to simulate db
   if (employee._id == '') {
     employee.parent_id = getTeamLeaderId(teamId);
     if (employee.parent_id == null) {
@@ -68,7 +68,7 @@ export const addEmployee = async (employee, teamId) => {
 };
 
 export const updateEmployee = async (employee) => {
-  // Update the employee data in global variable and localstorage storage to simulate db
+  // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
     employeesData[employee._id] = { ...employee };
     localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
@@ -80,7 +80,7 @@ export const updateEmployee = async (employee) => {
 export const moveEmployee = async (employee, newTeamId) => {
   let teamLeaderId = getTeamLeaderId(newTeamId);
 
-  // Update the employee data in global variable and localstorage storage to simulate db
+  // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
     employeesData[employee._id] = { ...employee, parent_id: teamLeaderId };
     localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
@@ -90,7 +90,7 @@ export const moveEmployee = async (employee, newTeamId) => {
 };
 
 export const promoteEmployee = async (employee) => {
-  // Update the employee data in global variable and localstorage storage to simulate db
+  // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
     if (employee.type === 'teamleader') {
       let teamResponse = await getTeamById(employee.parent_id);
@@ -162,17 +162,17 @@ export const promoteEmployee = async (employee) => {
 };
 
 export const deleteEmployee = async (employee) => {
-  // Update the employee data in global variable and localstorage storage to simulate db
+  // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
     // only delete team member
     if (employeesData[employee._id].type == 'member') {
       delete employeesData[employee._id];
       localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
-      return { data: 'success', message: 'Successully deleted employee.' };
+      return { data: 'success', message: 'Successfully deleted employee.' };
     }
 
     if (employeesData[employee._id].type == 'teamleader') {
-      // delete all the team members in hierarcy
+      // delete all the team members in hierarchy
       let teamMembers = filter(employeesData, (e) => e.parent_id === employee._id);
       Object.keys(teamMembers).forEach((key) => {
         delete employeesData[key];
@@ -180,7 +180,7 @@ export const deleteEmployee = async (employee) => {
 
       delete employeesData[employee._id];
       localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
-      return { data: 'success', message: 'Successully deleted team leader and members.' };
+      return { data: 'success', message: 'Successfully deleted team leader and members.' };
     } else {
       return { data: 'error', message: 'You can only delete team members.' };
     }
@@ -203,7 +203,7 @@ export const getTeamLeaderId = (teamId) => {
 };
 
 export const addTeam = async (team) => {
-  // Add team in global variable and localstorage storage to simulate db
+  // Add team in global variable and local storage storage to simulate db
   if (team._id === '') {
     team._id = generateTeamId(teamsData);
 
@@ -222,7 +222,7 @@ export const addTeam = async (team) => {
 };
 
 export const updateTeam = async (team) => {
-  // Update the team data in global variable and localstorage storage to simulate db
+  // Update the team data in global variable and local storage storage to simulate db
   if (teamsData.hasOwnProperty(team._id)) {
     teamsData[team._id] = { ...team };
     localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
@@ -232,13 +232,13 @@ export const updateTeam = async (team) => {
 };
 
 export const deleteTeam = async (team) => {
-  // Update the team data in global variable and localstorage storage to simulate db
+  // Update the team data in global variable and local storage storage to simulate db
   if (teamsData.hasOwnProperty(team._id)) {
     // only delete team member
     if (!hasTeamAnyMembers(team._id)) {
       delete teamsData[team._id];
       localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
-      return { data: 'success', message: 'Successully deleted team.' };
+      return { data: 'success', message: 'Successfully deleted team.' };
     } else {
       return { data: 'error', message: 'You can only delete teams without any members.' };
     }
@@ -312,14 +312,14 @@ export const getTeamMembersData = (id) => {
   let employee = employeesData.hasOwnProperty(id) ? employeesData[id] : null;
   if (employee) {
     if (employee.type === 'main') {
-      let reportees = filter(employeesData, (e) => e.parent_id === id);
+      let teamMembers = filter(employeesData, (e) => e.parent_id === id);
       let result = [];
-      if (reportees && Object.keys(reportees).length > 0) {
-        Object.keys(reportees).forEach((key) => {
-          result.push(reportees[key]);
+      if (teamMembers && Object.keys(teamMembers).length > 0) {
+        Object.keys(teamMembers).forEach((key) => {
+          result.push(teamMembers[key]);
         });
-        Object.keys(reportees).forEach((key) => {
-          let data = getTeamMembersData(reportees[key]._id);
+        Object.keys(teamMembers).forEach((key) => {
+          let data = getTeamMembersData(teamMembers[key]._id);
           if (data && data.length > 0) {
             result.push(...data);
           }
@@ -347,10 +347,10 @@ export const getTeamMembersData = (id) => {
       let result = [];
       result.push(employee);
 
-      let reportees = filter(employeesData, (e) => e.parent_id === id);
-      if (reportees && Object.keys(reportees).length > 0) {
-        Object.keys(reportees).forEach((key) => {
-          let data = getTeamMembersData(reportees[key]._id);
+      let teamMembers = filter(employeesData, (e) => e.parent_id === id);
+      if (teamMembers && Object.keys(teamMembers).length > 0) {
+        Object.keys(teamMembers).forEach((key) => {
+          let data = getTeamMembersData(teamMembers[key]._id);
           if (data && data.length > 0) {
             result.push(...data);
           }
@@ -366,11 +366,11 @@ export const getTeamMembersData = (id) => {
     let team = teamsData.hasOwnProperty(id) ? teamsData[id] : null;
     if (team._id) {
       let result = [];
-      let reportees = filter(employeesData, (e) => e.parent_id === team._id);
+      let teamMembers = filter(employeesData, (e) => e.parent_id === team._id);
 
-      if (reportees && Object.keys(reportees).length > 0) {
-        Object.keys(reportees).forEach((key) => {
-          let data = getTeamMembersData(reportees[key]._id);
+      if (teamMembers && Object.keys(teamMembers).length > 0) {
+        Object.keys(teamMembers).forEach((key) => {
+          let data = getTeamMembersData(teamMembers[key]._id);
           if (data && data.length > 0) {
             result.push(...data);
           }

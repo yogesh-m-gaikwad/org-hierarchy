@@ -79,7 +79,7 @@ const withEditableEmployee = (Component, employeeId, teamId) => {
       if (response.data === 'success') {
         setOriginalEmployee(null);
         setEmployee(null);
-        // TOOD: show success message
+        // TODO: show success message
         return response;
       } else {
         return response;

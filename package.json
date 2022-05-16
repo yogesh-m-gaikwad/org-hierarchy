@@ -1,7 +1,7 @@
 {
   "name": "org-hierarchy",
   "version": "1.0.0",
-  "description": "React Application to visuaize organization hierarchy on UI",
+  "description": "React Application to visualize organization hierarchy on UI",
   "main": "index.js",
   "homepage": "https://github.com/yogesh-m-gaikwad/org-hierarchy",
   "jest": {

@@ -6,10 +6,10 @@ import FilterBar from './FilterBar';
 import HierarchyContext from '../hooks/HierarchyContext';
 import HierarchyLoader from './HierarchyLoader';
 import HierarchyNodeRecursive from './HierarchyNodeRecursive';
-import TeamMebmersListPage from '../pages/TeamMembersListPage';
+import TeamMembersListPage from '../pages/TeamMembersListPage';
 import TeamPageLoader from './TeamPageLoader';
 import WelcomePage from '../pages/WelcomePage';
-import { fetchDataFromLocalstorage } from '../services/dataService';
+import { fetchDataFromLocalStorage } from '../services/dataService';
 
 const App = () => {
   const [hierarchy, setHierarchy] = useState(null);
@@ -28,7 +28,7 @@ const App = () => {
           <div className="column sidebar">
             <FilterBar></FilterBar>
             <div className="row hierarchy-container">
-              <HierarchyLoader getData={fetchDataFromLocalstorage}>
+              <HierarchyLoader getData={fetchDataFromLocalStorage}>
                 <HierarchyNodeRecursive />
               </HierarchyLoader>
             </div>
@@ -52,7 +52,7 @@ const App = () => {
               <Route path="/edit/team/:teamId" element={<TeamPageLoader mode="edit" />} />
               <Route path="/add/team/:managerId" element={<TeamPageLoader mode="add" />} />
 
-              <Route path="/team/list/:id" element={<TeamMebmersListPage />} />
+              <Route path="/team/list/:id" element={<TeamMembersListPage />} />
             </Routes>
           </div>
         </div>

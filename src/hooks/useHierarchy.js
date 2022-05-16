@@ -5,8 +5,8 @@ import HierarchyContext from './HierarchyContext';
 import { useContext } from 'react';
 
 /**
- * Custom Hierarchy hook to work on the shared hierarhcy context.
- * @returns The hierarcy state and its setState from contex.
+ * Custom Hierarchy hook to work on the shared hierarchy context.
+ * @returns The hierarchy state and its setState from context.
  */
 export const useHierarchy = () => {
   const { hierarchy, setHierarchy } = useContext(HierarchyContext);

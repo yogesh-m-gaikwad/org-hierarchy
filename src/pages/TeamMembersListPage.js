@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getTeamMembersData } from '../services/dataService';
 import { useParams } from 'react-router-dom';
 
-const TeamMebmersListPage = () => {
+const TeamMembersListPage = () => {
   let params = useParams();
   const [employees, setEmployees] = useState([]);
   useEffect(() => {
@@ -43,4 +43,4 @@ const TeamMebmersListPage = () => {
   );
 };
 
-export default TeamMebmersListPage;
+export default TeamMembersListPage;

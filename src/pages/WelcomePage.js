@@ -13,26 +13,29 @@ const WelcomePage = () => {
         <ul>
           <li>Click employee/ team name to view details page.</li>
           <li>
-            Click edit button <FontAwesomeIcon icon={faPenToSquare} /> open edit page.
+            Click edit
+            <FontAwesomeIcon className="action-icon" icon={faPenToSquare} /> &nbsp;icon open edit
+            page.
           </li>
           <li>
-            Click details button <FontAwesomeIcon icon={faRectangleList} /> to view details page.
+            Click details
+            <FontAwesomeIcon className="action-icon" icon={faRectangleList} /> &nbsp;icon to view
+            details page.
           </li>
           <li>
             List of team members at a level can be viewed using 'Employees List' button on the
-            parent's page - avilable for head and ceo.
+            parent's page - available for head and ceo.
           </li>
           <li>
-            To Promote, Delete and Move a team member visit the edit page for that team
-            member/employee.
+            To Promote, Delete and Move a team member access edit page for team member/employee.
           </li>
           <li>To add team member or new team visit the parent details page.</li>
           <li>
-            The filter box will help you to list team membsers using name, email or phone details.
-            THe hierarchy will be disaplyed filteed with maching members included at all levels.
+            The filter box will help you to list team members using name, email or phone details.
+            THe hierarchy will be displayed filtered with matching members included at all levels.
           </li>
           <li>
-            Click refresh <FontAwesomeIcon icon={faArrowsRotate} /> button to relead the hierarchy.
+            Click refresh <FontAwesomeIcon icon={faArrowsRotate} /> button to reload the hierarchy.
           </li>
           <li>
             To reset to original state click{' '}
