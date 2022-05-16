@@ -38,5 +38,13 @@
     "type": "team",
     "department": "engineering",
     "manager_id": "1003"
+  },
+  {
+    "_id": "T1006",
+    "name": "Team DevOps",
+    "email": "devops@hierarchy.org",
+    "type": "team",
+    "department": "it",
+    "manager_id": "1023"
   }
 ]

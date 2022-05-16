@@ -56,15 +56,29 @@ button#refresh {
 .hierarchy-container {
   padding-top: 10px;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   flex-direction: column !important;
   min-height: 70vh;
   height: 700px;
 }
 
 .hierarchy-entry {
-  height: 32px;
+  height: 28px;
   flex-direction: row;
+  color: #000;
+  padding-top: 5px;
+  padding-left: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.hierarchy-entry:hover {
+  background-color: #f5f0f8;
+}
+
+.hierarchy-container .row {
+  min-height: 28px;
+  width: calc(100% - 10rem);
 }
 
 .button-inline {
@@ -83,6 +97,7 @@ button#refresh {
 
 .hierarchy-container::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
   background-color: #c4cfd9;
 }
 
@@ -95,14 +110,14 @@ button#refresh {
 .sidebar {
   font-family: monospace, monospace;
   color: #000;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   margin: 24px !important;
   min-height: 500px;
   line-height: 1.8rem;
   border-right: 1px solid rgba(155, 165, 182, 0.3);
-  min-width: 350px;
-  width: 350px !important;
+  min-width: 400px;
+  width: 400px !important;
 }
 .row {
   min-height: 35px;
@@ -120,6 +135,7 @@ button#refresh {
 
 .page-content {
   overflow-y: auto;
+  min-height: 500px;
 }
 
 .page-content::-webkit-scrollbar-track {
@@ -139,6 +155,21 @@ button#refresh {
   border-radius: 10px;
 }
 
+td,
+th {
+  padding: 0.8rem;
+}
+
+tbody tr:hover {
+  background-color: #f5f0f8;
+}
+.employee-id-link {
+  line-height: 1rem !important;
+  height: 14px !important;
+  font-size: 12px !important;
+  padding: 0 0.5rem !important;
+}
+
 .footer {
   margin: 24px !important;
 }
@@ -154,7 +185,7 @@ button#refresh {
 
 .form-label {
   margin-right: 10px;
-  text-align: right;
+  text-align: left;
 }
 
 .form-title {
@@ -179,7 +210,11 @@ label.required::after {
 
 .error-message {
   color: rgba(235, 8, 8, 0.863);
-  font-size: 14px;
+  font-size: 12px;
+  padding-bottom: 2px;
+  display: block;
+  position: relative;
+  top: -12px;
 }
 
 .employee-table {
@@ -190,11 +225,6 @@ label.required::after {
   overflow-x: auto;
   overflow-y: auto;
   height: 100%;
-}
-
-td,
-th {
-  padding: 0.8rem;
 }
 
 #loading {
@@ -235,7 +265,7 @@ th {
   }
   .sidebar {
     border-right: none;
-    min-width: 350px;
+    min-width: 100%;
   }
 
   .row.content {

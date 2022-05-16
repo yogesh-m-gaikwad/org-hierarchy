@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 
+import { EMAIL_VALIDATION_REGEX } from '../utils/constants';
 import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
 
+/**
+ * Add new team page.
+ * @param {*} props
+ * @returns TeamAddPage Component.
+ */
 export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
   const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   const [errors, setErrors] = useState({});
@@ -16,7 +22,7 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
       };
     }
 
-    if (!team.email && team.email.match(EMAIL_VALIDATION_REGEX)) {
+    if (!team.email || !team.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
         message: 'A valid email is required.',
       };

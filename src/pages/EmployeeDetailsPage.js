@@ -1,9 +1,16 @@
+import { ORG_MAIN, TEAM_HEAD } from '../utils/constants';
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Employee details page.
+ * @param {*} props
+ * @returns EmployeeDetailsPage Component.
+ */
 export const EmployeeDetailsPage = ({ employee }) => {
   let navigate = useNavigate();
-  let showListButton = employee.type === 'main' || employee.type === 'head';
+  let showListButton = employee.type === ORG_MAIN || employee.type === TEAM_HEAD;
   return (
     <div className="container">
       <div className="row">
@@ -32,7 +39,7 @@ export const EmployeeDetailsPage = ({ employee }) => {
         </div>
       </div>
       <div className="row">
-        {employee.type === 'head' && (
+        {employee.type === TEAM_HEAD && (
           <>
             <div className="column column-33">
               <button

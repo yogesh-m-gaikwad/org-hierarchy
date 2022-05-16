@@ -1,6 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Team details page.
+ * @param {*} props
+ * @returns TeamDetailsPage Component.
+ */
 const TeamDetailsPage = ({ team }) => {
   let navigate = useNavigate();
 

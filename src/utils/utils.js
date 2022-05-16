@@ -1,4 +1,7 @@
+import { ORG_MAIN, TEAM, TEAM_HEAD, TEAM_LEADER, TEAM_MEMBER } from './constants';
+
 export const isObject = (o) => typeof o === 'object' && o !== null;
+
 export const isEmpty = (obj) => {
   if (!obj) return true;
   else if (Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype)
@@ -11,7 +14,7 @@ export const hasNoErrors = (o) => o && typeof o === 'object' && Object.keys(o).l
 
 export const generateHierarchy = (employees, teams) => {
   let hierarchy = {};
-  let ceo = filter(employees, (e) => e.type === 'main' && e.parent_id === null);
+  let ceo = filter(employees, (e) => e.type === ORG_MAIN && e.parent_id === null);
   let keys = Object.keys(ceo);
   if (keys && keys.length > 0) {
     hierarchy = {
@@ -42,7 +45,7 @@ export const generateHierarchyForCurrent = (currentMember, employees, teams) => 
 
   let filteredEmployees = filter(employees, (e) => e.parent_id === currentMember._id);
   let sortKey = 'name';
-  if (currentMember.type === 'main') {
+  if (currentMember.type === ORG_MAIN) {
     sortKey = 'order';
   }
   let sortedEmployees = sort(filteredEmployees, sortKey);
@@ -58,22 +61,32 @@ export const generateHierarchyForCurrent = (currentMember, employees, teams) => 
   return children;
 };
 
+/**
+ * This method filters the hierarchy data based on email, phone and employee name.
+ * All the tree for a match is returned to show in hierarchy.
+ * @param {Array} employees
+ * @param {Array} teams
+ * @param {String} filterString
+ * @returns
+ */
 export const filterHierarchyData = (employees, teams, filterString) => {
   let filteredEmployees = {};
 
+  let filteredMain = filter(employees, (e) => e.type === ORG_MAIN && matchFilter(e, filterString));
+
   let filteredTeamMembers = filter(
     employees,
-    (e) => e.type === 'member' && matchFilter(e, filterString)
+    (e) => e.type === TEAM_MEMBER && matchFilter(e, filterString)
   );
 
   let filteredTeamLeaders = filter(
     employees,
-    (e) => e.type === 'teamleader' && matchFilter(e, filterString)
+    (e) => e.type === TEAM_LEADER && matchFilter(e, filterString)
   );
 
   let filteredTeamHeads = filter(
     employees,
-    (e) => e.type === 'head' && matchFilter(e, filterString)
+    (e) => e.type === TEAM_HEAD && matchFilter(e, filterString)
   );
 
   let filteredTeams = filter(teams, (e) => matchFilter(e, filterString));
@@ -83,6 +96,7 @@ export const filterHierarchyData = (employees, teams, filterString) => {
     ...filteredTeamMembers,
     ...filteredTeamLeaders,
     ...filteredTeamHeads,
+    ...filteredMain,
   };
 
   Object.keys(filteredTeamMembers).forEach((key) => {
@@ -108,7 +122,7 @@ export const filterHierarchyData = (employees, teams, filterString) => {
 
   let filteredKeys = Object.keys(filteredEmployees);
   if (filteredKeys.length > 0) {
-    let ceo = filter(employees, (e) => e.type === 'main' && e.parent_id === null);
+    let ceo = filter(employees, (e) => e.type === ORG_MAIN && e.parent_id === null);
     filteredEmployees = { ...filteredEmployees, ...ceo };
 
     return generateHierarchy(filteredEmployees, filteredTeams);
@@ -140,7 +154,7 @@ export const generateHierarchyWithFilter = (currentMember, employees, teams, fil
   );
 
   let sortKey = 'name';
-  if (currentMember.type === 'main') {
+  if (currentMember.type === ORG_MAIN) {
     sortKey = 'order';
   }
 
@@ -204,7 +218,7 @@ export const getEmptyEmployeeToAdd = () => {
     position: 'Team Member',
     email: '',
     phone: '',
-    type: 'member',
+    type: TEAM_MEMBER,
     parent_id: '',
   };
 };
@@ -215,7 +229,7 @@ export const getEmptyTeamToAdd = () => {
     name: '',
     email: '',
     department: '',
-    type: 'team',
+    type: TEAM,
     manager_id: '',
   };
 };

@@ -11,6 +11,10 @@ import TeamPageLoader from './TeamPageLoader';
 import WelcomePage from '../pages/WelcomePage';
 import { fetchDataFromLocalStorage } from '../services/dataService';
 
+/**
+ * Main Application container Component.
+ * @returns The App Component.
+ */
 const App = () => {
   const [hierarchy, setHierarchy] = useState(null);
 
@@ -47,11 +51,9 @@ const App = () => {
                 element={<EmployeePageLoader mode="edit" />}
               />
               <Route path="/add/employee/:teamId" element={<EmployeePageLoader mode="add" />} />
-
               <Route path="/team/:teamId" element={<TeamPageLoader mode="show" />} />
               <Route path="/edit/team/:teamId" element={<TeamPageLoader mode="edit" />} />
               <Route path="/add/team/:managerId" element={<TeamPageLoader mode="add" />} />
-
               <Route path="/team/list/:id" element={<TeamMembersListPage />} />
             </Routes>
           </div>

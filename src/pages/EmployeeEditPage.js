@@ -1,4 +1,9 @@
-import { EMAIL_VALIDATION_REGEX, PHONE_VALIDATION_REGEX } from '../utils/constants';
+import {
+  EMAIL_VALIDATION_REGEX,
+  ORG_MAIN,
+  PHONE_VALIDATION_REGEX,
+  TEAM_MEMBER,
+} from '../utils/constants';
 import React, { useEffect, useState } from 'react';
 
 import { getAllowedTeams } from '../services/dataService';
@@ -6,6 +11,11 @@ import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Edit employee details page.
+ * @param {*} props
+ * @returns EmployeeEditPage Component.
+ */
 export const EmployeeEditPage = ({
   employee,
   onChangeEmployee,
@@ -21,8 +31,8 @@ export const EmployeeEditPage = ({
   const [formMessage, setFormMessage] = useState(null);
   const [filteredTeams, setFilteredTeams] = useState([]);
   const [newTeamId, setNewTeamId] = useState(null);
-  const showPromote = employee.type !== 'main';
-  const showDelete = employee.type !== 'main';
+  const showPromote = employee.type !== ORG_MAIN;
+  const showDelete = employee.type !== ORG_MAIN;
 
   let navigate = useNavigate();
 
@@ -42,15 +52,21 @@ export const EmployeeEditPage = ({
       };
     }
 
-    if (!employee.email && employee.email.match(EMAIL_VALIDATION_REGEX)) {
+    if (!employee.email || !employee.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
         message: 'A valid email is required.',
       };
     }
 
-    if (!employee.phone && employee.phone.match(PHONE_VALIDATION_REGEX)) {
+    if (!employee.phone || !employee.phone.match(PHONE_VALIDATION_REGEX)) {
       errors.phone = {
         message: 'A phone number in +XX XXXXX XXXXX format is required.',
+      };
+    }
+
+    if (!employee.position || employee.name.length < 3 || employee.name.length > 50) {
+      errors.position = {
+        message: 'Position text is required min 3 & max 50 characters.',
       };
     }
 
@@ -65,10 +81,10 @@ export const EmployeeEditPage = ({
 
   return (
     <>
-      <div className="continer">
+      <div className="container">
         <div className="row">
           <h4 id="employee-id" className="form-field form-title">
-            ID: {employee._id}
+            Employee ID: <span style={{ color: '#9b4dca' }}>{employee._id}</span>
           </h4>
         </div>
         <div className="row">
@@ -210,7 +226,7 @@ export const EmployeeEditPage = ({
         </div>
       </div>
       <br></br>
-      {employee.type === 'member' && (
+      {employee.type === TEAM_MEMBER && (
         <div className="container">
           <div className="row">
             <h4 id="employee-id" className="form-field form-title">
@@ -246,7 +262,7 @@ export const EmployeeEditPage = ({
                     reloadHierarchy();
                   } else {
                     setMoveTeamError({
-                      text: 'Please select a team from doropdown.',
+                      text: 'Please select a team from dropdown.',
                       type: 'error',
                     });
                   }

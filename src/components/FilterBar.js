@@ -1,10 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { debounce } from '../utils/utils';
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { useHierarchy } from '../hooks/useHierarchy';
 
+/**
+ * Search/Filter Bar container Component.
+ * @returns The FilterBar Component.
+ */
 const FilterBar = () => {
   const [_hierarchy, _setHierarchy, reloadHierarchy, filterHierarchy] = useHierarchy();
   const [filterString, setFilterString] = useState('');
@@ -29,17 +33,13 @@ const FilterBar = () => {
     [debouncedSearch]
   );
 
-  // const handleChange = (e) => {
-  //   setFilterString(e.target.value);
-  // };
-
   return (
     <div direction="horizontal" align="center" className="row filter-bar">
       <div className="column-80">
         <input
           id="filter-hierarchy"
           className="filter"
-          placeholder="Enter search string..."
+          placeholder="Enter filter text..."
           value={filterString}
           onChange={handleChange}
         />

@@ -3,6 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { getTeamMembersData } from '../services/dataService';
 import { useParams } from 'react-router-dom';
 
+/**
+ * List of team members page.
+ * @param {*} props
+ * @returns TeamMembersListPage Component.
+ */
 const TeamMembersListPage = () => {
   let params = useParams();
   const [employees, setEmployees] = useState([]);

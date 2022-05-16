@@ -5,6 +5,11 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import withEditableEmployee from './withEditableEmployee';
 
+/**
+ * Loads the HOC with correct parameter.
+ * @param {*} props
+ * @returns Returns a employee editable page component based on the parameter passed.
+ */
 export const EmployeePageLoader = (props) => {
   let params = useParams();
 

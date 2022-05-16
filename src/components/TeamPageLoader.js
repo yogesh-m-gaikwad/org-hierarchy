@@ -5,6 +5,11 @@ import TeamEditPage from '../pages/TeamEditPage';
 import { useParams } from 'react-router-dom';
 import withEditableTeam from './withEditableTeam';
 
+/**
+ * Loads the HOC with correct parameter.
+ * @param {*} props
+ * @returns Returns a team editable page component based on the parameter passed.
+ */
 export const TeamPageLoader = (props) => {
   let params = useParams();
 

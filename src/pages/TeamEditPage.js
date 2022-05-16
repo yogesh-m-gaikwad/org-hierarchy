@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import { EMAIL_VALIDATION_REGEX } from '../utils/constants';
 import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
 
+/**
+ * Edit Team details page.
+ * @param {*} props
+ * @returns TeamEditPage Component.
+ */
 export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRemoveTeam }) => {
   const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   const [errors, setErrors] = useState({});
@@ -20,7 +26,7 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
       };
     }
 
-    if (!team.email && team.email.match(EMAIL_VALIDATION_REGEX)) {
+    if (!team.email || !team.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
         message: 'A valid email is required.',
       };
@@ -39,7 +45,7 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
     <div className="container">
       <div className="row">
         <h4 id="team-id" className="form-title">
-          ID: {team._id}
+          Team ID: <span style={{ color: '#9b4dca' }}>{team._id}</span>
         </h4>
       </div>
       <div className="row">

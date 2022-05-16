@@ -1,19 +1,19 @@
 [
   {
     "_id": "1001",
-    "name": "Ramnath",
+    "name": "Ramnath Nelage",
     "position": "CEO",
     "email": "ramnath@hierarchy.org",
-    "phone": "+022667867869",
+    "phone": "+0226678678",
     "type": "main",
     "parent_id": null
   },
   {
     "_id": "1002",
-    "name": "Virag",
+    "name": "Virag Parth",
     "position": "Head of HR",
     "email": "virag@hierarchy.org",
-    "phone": "+022667867863",
+    "phone": "+0226678674",
     "type": "head",
     "department": "hr",
     "parent_id": "1001",
@@ -25,7 +25,7 @@
     "name": "Aman",
     "position": "Head of Engineering",
     "email": "aman@hierarchy.org",
-    "phone": "+022667867861",
+    "phone": "+0226678678",
     "type": "head",
     "department": "engineering",
     "parent_id": "1001",
@@ -37,7 +37,7 @@
     "name": "Vaishali",
     "position": "Head of Design",
     "email": "vaishali@hierarchy.org",
-    "phone": "+022667867860",
+    "phone": "+0226678672",
     "type": "head",
     "department": "design",
     "parent_id": "1001",
@@ -49,7 +49,7 @@
     "name": "Ravin",
     "position": "Team Lead",
     "email": "ravin@hierarchy.org",
-    "phone": "+022878978763",
+    "phone": "+0228789787",
     "type": "teamleader",
     "parent_id": "T1001"
   },
@@ -58,7 +58,7 @@
     "name": "Joy",
     "position": "Team Member",
     "email": "joy@hierarchy.org",
-    "phone": "+022878978763",
+    "phone": "+0228789783",
     "type": "member",
     "parent_id": "1008"
   },
@@ -67,7 +67,7 @@
     "name": "Vishu",
     "position": "Team Member",
     "email": "vishu@hierarchy.org",
-    "phone": "+022878978463",
+    "phone": "+0228789784",
     "type": "member",
     "parent_id": "1008"
   },
@@ -77,7 +77,7 @@
     "name": "Vrind",
     "position": "Team Lead",
     "email": "vrind@hierarchy.org",
-    "phone": "+022878978761",
+    "phone": "+0228789781",
     "type": "teamleader",
     "parent_id": "T1003"
   },
@@ -86,7 +86,7 @@
     "name": "Surendra",
     "position": "Team Member",
     "email": "surendra@hierarchy.org",
-    "phone": "+022878978765",
+    "phone": "+0228789785",
     "type": "member",
     "parent_id": "1010"
   },
@@ -96,7 +96,7 @@
     "name": "Manasi",
     "position": "Team Lead",
     "email": "manasi@hierarchy.org",
-    "phone": "+022878478761",
+    "phone": "+0228784761",
     "type": "teamleader",
     "parent_id": "T1002"
   },
@@ -105,7 +105,7 @@
     "name": "Rudra",
     "position": "Team Member",
     "email": "rudra@hierarchy.org",
-    "phone": "+022878578765",
+    "phone": "+0228785765",
     "type": "member",
     "parent_id": "1017"
   },
@@ -114,7 +114,7 @@
     "name": "Riya",
     "position": "Team Lead",
     "email": "riya@hierarchy.org",
-    "phone": "+022878978764",
+    "phone": "+0228778764",
     "type": "teamleader",
     "parent_id": "T1004"
   },
@@ -123,7 +123,7 @@
     "name": "Gor",
     "position": "Team Member",
     "email": "gor@hierarchy.org",
-    "phone": "+022878948765",
+    "phone": "+0228788765",
     "type": "member",
     "parent_id": "1013"
   },
@@ -132,7 +132,7 @@
     "name": "Vishwas",
     "position": "Team Member",
     "email": "vishwas@hierarchy.org",
-    "phone": "+022875978765",
+    "phone": "+0228978765",
     "type": "member",
     "parent_id": "1013"
   },
@@ -141,7 +141,7 @@
     "name": "Vamasi",
     "position": "Team Lead",
     "email": "vamasi@hierarchy.org",
-    "phone": "+022828978764",
+    "phone": "+0228978764",
     "type": "teamleader",
     "parent_id": "T1005"
   },
@@ -150,7 +150,7 @@
     "name": "Gord",
     "position": "Team Member",
     "email": "gord@hierarchy.org",
-    "phone": "+022848948765",
+    "phone": "+0228448761",
     "type": "member",
     "parent_id": "1020"
   },
@@ -159,8 +159,47 @@
     "name": "Rohan",
     "position": "Team Member",
     "email": "rohan@hierarchy.org",
-    "phone": "+022835978765",
+    "phone": "+0228378769",
     "type": "member",
     "parent_id": "1020"
+  },
+  {
+    "_id": "1023",
+    "name": "Apara",
+    "position": "Head of IT",
+    "email": "vaishali@hierarchy.org",
+    "phone": "+0226678672",
+    "type": "head",
+    "department": "it",
+    "parent_id": "1001",
+    "teams": ["T1006"],
+    "order": 4
+  },
+  {
+    "_id": "1024",
+    "name": "Vignesh",
+    "position": "Team Lead",
+    "email": "vignesh@hierarchy.org",
+    "phone": "+0228578764",
+    "type": "teamleader",
+    "parent_id": "T1006"
+  },
+  {
+    "_id": "1025",
+    "name": "James Moore",
+    "position": "Team Member",
+    "email": "james@hierarchy.org",
+    "phone": "+0228448764",
+    "type": "member",
+    "parent_id": "1024"
+  },
+  {
+    "_id": "1022",
+    "name": "Rojan",
+    "position": "Team Member",
+    "email": "rojan@hierarchy.org",
+    "phone": "+0228378799",
+    "type": "member",
+    "parent_id": "1024"
   }
 ]

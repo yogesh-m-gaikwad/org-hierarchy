@@ -1,4 +1,11 @@
-import { EMPLOYEES_DATA_KEY, TEAMS_DATA_KEY } from '../utils/constants';
+import {
+  EMPLOYEES_DATA_KEY,
+  ORG_MAIN,
+  TEAMS_DATA_KEY,
+  TEAM_HEAD,
+  TEAM_LEADER,
+  TEAM_MEMBER,
+} from '../utils/constants';
 import { filter, generateEmployeeId, generateHierarchy, generateTeamId } from '../utils/utils';
 
 import employees from '../data/employees.json';
@@ -57,7 +64,7 @@ export const addEmployee = async (employee, teamId) => {
     employee.parent_id = getTeamLeaderId(teamId);
     if (employee.parent_id == null) {
       employee.parent_id = teamId;
-      employee.type = 'teamleader';
+      employee.type = TEAM_LEADER;
     }
     employee._id = generateEmployeeId(employeesData);
     employeesData[employee._id] = { ...employee };
@@ -89,48 +96,54 @@ export const moveEmployee = async (employee, newTeamId) => {
   return { data: employeesData[employee._id] };
 };
 
+export const promoteTeamLeader = async (employee, deleteFlag, employeesData) => {
+  let responseTeam = await getTeamById(employee.parent_id);
+  let oldTeam = responseTeam.data;
+  let response = await getEmployeeById(oldTeam.manager_id);
+  let oldHead = response.data;
+
+  employeesData[employee._id] = {
+    ...employee,
+    parent_id: oldHead.parent_id,
+    type: oldHead.type,
+    position: oldHead.position,
+    teams: oldHead.teams,
+  };
+
+  let oldMembers = filter(employeesData, (e) => e.parent_id === employee._id);
+  let keys = Object.keys(oldMembers);
+  if (keys.length > 0) {
+    let newRandomTeamMember = employeesData[keys[0]];
+    employeesData[keys[0]] = {
+      ...newRandomTeamMember,
+      parent_id: employee.parent_id,
+      type: employee.type,
+      position: employee.position,
+      teams: employee.teams,
+    };
+
+    keys.shift();
+    keys.forEach((key) => {
+      employeesData[key] = { ...employeesData[key], parent_id: newRandomTeamMember._id };
+    });
+
+    let oldTeams = filter(teamsData, (e) => e.manager_id === oldHead._id);
+    Object.keys(oldTeams).forEach((key) => {
+      teamsData[key] = { ...teamsData[key], manager_id: employee._id };
+    });
+
+    if (deleteFlag) {
+      delete employeesData[oldHead._id];
+    }
+  }
+};
+
 export const promoteEmployee = async (employee) => {
   // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
-    if (employee.type === 'teamleader') {
-      let teamResponse = await getTeamById(employee.parent_id);
-      let oldTeam = teamResponse.data;
-      let response = await getEmployeeById(oldTeam.manager_id);
-      let oldHead = response.data;
-
-      employeesData[employee._id] = {
-        ...employee,
-        parent_id: oldHead.parent_id,
-        type: oldHead.type,
-        position: oldHead.position,
-        teams: oldHead.teams,
-      };
-
-      let oldMembers = filter(employeesData, (e) => e.parent_id === employee._id);
-      let keys = Object.keys(oldMembers);
-      if (keys.length > 0) {
-        let newRandomTeamMember = employeesData[keys[0]];
-        employeesData[keys[0]] = {
-          ...newRandomTeamMember,
-          parent_id: employee.parent_id,
-          type: employee.type,
-          position: employee.position,
-          teams: employee.teams,
-        };
-
-        keys.shift();
-        keys.forEach((key) => {
-          employeesData[key] = { ...employeesData[key], parent_id: newRandomTeamMember._id };
-        });
-
-        let oldTeams = filter(teamsData, (e) => e.manager_id === oldHead._id);
-        Object.keys(oldTeams).forEach((key) => {
-          teamsData[key] = { ...teamsData[key], manager_id: employee._id };
-        });
-
-        delete employeesData[oldHead._id];
-      }
-    } else {
+    if (employee.type === TEAM_LEADER) {
+      await promoteTeamLeader(employee, true, employeesData);
+    } else if (employee.type === TEAM_MEMBER) {
       let response = await getEmployeeById(employee.parent_id);
       let oldParent = response.data;
 
@@ -153,9 +166,61 @@ export const promoteEmployee = async (employee) => {
       });
 
       delete employeesData[oldParent._id];
+    } else if (employee.type === TEAM_HEAD) {
+      let response = await getEmployeeById(employee.parent_id);
+      let oldParent = response.data;
+
+      let teamLeaderReplacement = getRandomTeamLeader(employee._id);
+
+      if (teamLeaderReplacement) {
+        let response = await getEmployeeById(teamLeaderReplacement);
+        let randomTeamLeader = response.data;
+
+        // promote random team leader without deleting manager
+        await promoteTeamLeader(randomTeamLeader, false, employeesData);
+
+        let oldMembers = filter(employeesData, (e) => e.parent_id === oldParent._id);
+        Object.keys(oldMembers).forEach((key) => {
+          employeesData[key] = { ...employeesData[key], parent_id: employee._id };
+        });
+
+        let oldTeams = filter(teamsData, (e) => e.manager_id === oldParent._id);
+        Object.keys(oldTeams).forEach((key) => {
+          teamsData[key] = { ...teamsData[key], manager_id: employee._id };
+        });
+
+        employeesData[employee._id] = {
+          ...employee,
+          parent_id: oldParent.parent_id,
+          type: oldParent.type,
+          position: oldParent.position,
+          teams: [],
+        };
+
+        delete employeesData[employee._id].teams;
+        delete employeesData[oldParent._id];
+      } else {
+        // delete all teams as there is no team leader found for this team head and promote
+        for (const teamId of employeesData[managerId].teams) {
+          delete teamsData[teamId];
+        }
+
+        let oldMembers = filter(employeesData, (e) => e.parent_id === oldParent._id);
+        Object.keys(oldMembers).forEach((key) => {
+          employeesData[key] = { ...employeesData[key], parent_id: employee._id };
+        });
+
+        let oldTeams = filter(teamsData, (e) => e.manager_id === oldParent._id);
+        Object.keys(oldTeams).forEach((key) => {
+          teamsData[key] = { ...teamsData[key], manager_id: employee._id };
+        });
+
+        delete employeesData[oldParent._id];
+      }
     }
 
     localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
+    localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
   }
 
   return { data: employeesData[employee._id] };
@@ -165,13 +230,13 @@ export const deleteEmployee = async (employee) => {
   // Update the employee data in global variable and local storage storage to simulate db
   if (employeesData.hasOwnProperty(employee._id)) {
     // only delete team member
-    if (employeesData[employee._id].type == 'member') {
+    if (employeesData[employee._id].type == TEAM_MEMBER) {
       delete employeesData[employee._id];
       localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
       return { data: 'success', message: 'Successfully deleted employee.' };
     }
 
-    if (employeesData[employee._id].type == 'teamleader') {
+    if (employeesData[employee._id].type == TEAM_LEADER) {
       // delete all the team members in hierarchy
       let teamMembers = filter(employeesData, (e) => e.parent_id === employee._id);
       Object.keys(teamMembers).forEach((key) => {
@@ -199,6 +264,15 @@ export const getTeamLeaderId = (teamId) => {
   if (keys && keys.length > 0) {
     return keys[0];
   }
+  return null;
+};
+
+export const getRandomTeamLeader = (managerId) => {
+  for (const teamId of employeesData[managerId].teams) {
+    let teamLeaderId = getTeamLeaderId(teamId);
+    if (teamLeaderId) return teamLeaderId;
+  }
+
   return null;
 };
 
@@ -265,7 +339,7 @@ export const getAllowedTeams = async (employeeId) => {
   return [];
 };
 
-export const hasTeamAnyMembers = (teamId) => {
+export const hasTeamAnyMembers = async (teamId) => {
   if (teamId) {
     let filteredEmployees = filter(employeesData, (e) => e.parent_id === teamId);
     if (filteredEmployees && Object.keys(filteredEmployees).length > 0) {
@@ -296,11 +370,11 @@ export const getTeamId = async (employeeId) => {
   let response = await getEmployeeById(employeeId);
   let employee = response.data;
   if (employee) {
-    if (employee.type === 'member') {
+    if (employee.type === TEAM_MEMBER) {
       employee = await getEmployeeById(employee.parent_id);
       return employee.data.parent_id;
     }
-    if (employee.type === 'teamleader') {
+    if (employee.type === TEAM_LEADER) {
       return employee.parent_id;
     }
   }
@@ -311,7 +385,7 @@ export const getTeamId = async (employeeId) => {
 export const getTeamMembersData = (id) => {
   let employee = employeesData.hasOwnProperty(id) ? employeesData[id] : null;
   if (employee) {
-    if (employee.type === 'main') {
+    if (employee.type === ORG_MAIN) {
       let teamMembers = filter(employeesData, (e) => e.parent_id === id);
       let result = [];
       if (teamMembers && Object.keys(teamMembers).length > 0) {
@@ -328,7 +402,7 @@ export const getTeamMembersData = (id) => {
         return result;
       }
     }
-    if (employee.type === 'head') {
+    if (employee.type === TEAM_HEAD) {
       let teams = filter(teamsData, (t) => t.manager_id === id);
       let result = [];
       if (teams && Object.keys(teams).length > 0) {
@@ -343,7 +417,7 @@ export const getTeamMembersData = (id) => {
       }
     }
 
-    if (employee.type === 'teamleader') {
+    if (employee.type === TEAM_LEADER) {
       let result = [];
       result.push(employee);
 
@@ -359,7 +433,7 @@ export const getTeamMembersData = (id) => {
         return result;
       }
     }
-    if (employee.type === 'member') {
+    if (employee.type === TEAM_MEMBER) {
       return [employee];
     }
   } else {

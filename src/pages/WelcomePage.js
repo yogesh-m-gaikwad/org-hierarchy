@@ -5,16 +5,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Welcome Page for application.
+ * @param {*} props
+ * @returns WelcomePage Component.
+ */
 const WelcomePage = () => {
   return (
     <div className="container">
       <h2 className="form-title">Welcome to Hierarchy UI</h2>
       <div className="row">
         <ul>
-          <li>Click employee/ team name to view details page.</li>
+          <li>Click employee/team title to view details page.</li>
           <li>
             Click edit
-            <FontAwesomeIcon className="action-icon" icon={faPenToSquare} /> &nbsp;icon open edit
+            <FontAwesomeIcon className="action-icon" icon={faPenToSquare} /> &nbsp;icon to open edit
             page.
           </li>
           <li>
@@ -23,24 +28,26 @@ const WelcomePage = () => {
             details page.
           </li>
           <li>
-            List of team members at a level can be viewed using 'Employees List' button on the
-            parent's page - available for head and ceo.
+            List of team members at a given level is available using 'Employees List' option on
+            parent's page - for roles of head of department and ceo.
           </li>
           <li>
             To Promote, Delete and Move a team member access edit page for team member/employee.
+            After promoting a team lead a random team member is selected as new lead if available.
           </li>
           <li>To add team member or new team visit the parent details page.</li>
           <li>
-            The filter box will help you to list team members using name, email or phone details.
-            THe hierarchy will be displayed filtered with matching members included at all levels.
+            The filter box will help to search team members using name, email or phone details. The
+            hierarchy will be displayed filtered with matching members and their parents.
           </li>
           <li>
-            Click refresh <FontAwesomeIcon icon={faArrowsRotate} /> button to reload the hierarchy.
+            Click refresh &nbsp;
+            <FontAwesomeIcon icon={faArrowsRotate} /> &nbsp;button to refresh the hierarchy.
           </li>
           <li>
-            To reset to original state click{' '}
+            To reset to original state click:
             <input
-              class="button button-clear"
+              className="button button-clear"
               type="submit"
               value="Restore Data"
               onClick={() => {

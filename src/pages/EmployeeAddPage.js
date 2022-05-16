@@ -1,8 +1,14 @@
+import { EMAIL_VALIDATION_REGEX, PHONE_VALIDATION_REGEX } from '../utils/constants';
 import React, { useState } from 'react';
 
 import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
 
+/**
+ * Add new employee page.
+ * @param {*} props
+ * @returns EmployeeAddPage Component.
+ */
 export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmployee }) => {
   const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   const [errors, setErrors] = useState({});
@@ -16,21 +22,21 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
       };
     }
 
-    if (!employee.email && employee.email.match(EMAIL_VALIDATION_REGEX)) {
+    if (!employee.email || !employee.email.match(EMAIL_VALIDATION_REGEX)) {
       errors.email = {
         message: 'A valid email is required.',
       };
     }
 
-    if (!employee.phone && employee.phone.match(PHONE_VALIDATION_REGEX)) {
+    if (!employee.phone || !employee.phone.match(PHONE_VALIDATION_REGEX)) {
       errors.phone = {
-        message: 'A phone number in +XX XXXXX XXXXX format is required.',
+        message: 'A phone number in +XX XXXX XXXX format is required.',
       };
     }
 
-    if (!employee.position) {
+    if (!employee.position || employee.name.length < 3 || employee.name.length > 50) {
       errors.position = {
-        message: 'Position text is required.',
+        message: 'Position text is required min 3 & max 50 characters.',
       };
     }
 

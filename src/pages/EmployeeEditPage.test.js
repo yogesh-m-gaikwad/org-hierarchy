@@ -1,6 +1,7 @@
 import EmployeeEditPage from './EmployeeEditPage';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { TEAM_MEMBER } from '../utils/constants';
 import { act } from 'react-dom/test-utils';
 import { createRoot } from 'react-dom/client';
 
@@ -27,7 +28,7 @@ it('renders form with id, name, email and phone fields', () => {
       position: 'HR',
       email: 'vishu@hierarchy.org',
       phone: '+022878978463',
-      type: 'member',
+      type: TEAM_MEMBER,
       parent_id: '1008',
     },
     onChangeEmployee: () => {},
