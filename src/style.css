@@ -1,0 +1,241 @@
+body {
+  font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 1.4em;
+  color: #000;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+.main {
+  margin-left: 0px !important;
+  padding: 0;
+  font-weight: bold;
+}
+
+.head {
+  margin-left: 25px !important;
+}
+
+.team {
+  margin-left: 50px !important;
+}
+
+.teamleader {
+  margin-left: 75px !important;
+}
+
+.member {
+  margin-left: 100px !important;
+}
+
+.main-layout {
+  overflow-x: hidden;
+}
+
+.header {
+  background-color: #9b4dca;
+  height: 60px;
+  padding: 10px;
+}
+
+.header h3 {
+  color: aliceblue;
+  font-weight: bold;
+}
+
+.filter-bar {
+  padding-bottom: 10px;
+}
+
+button#refresh {
+  margin-left: 10px;
+}
+
+.hierarchy-container {
+  padding-top: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-direction: column !important;
+  min-height: 70vh;
+  height: 700px;
+}
+
+.hierarchy-entry {
+  flex: 1;
+  align-items: stretch;
+  height: 28px;
+  flex-direction: row;
+  color: #ac8bc5;
+  padding-top: 5px;
+  padding-left: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.hierarchy-entry:hover {
+  background-color: #f5f0f8;
+}
+
+.hierarchy-container .row {
+  min-height: 28px;
+  width: 100%;
+}
+
+.button-inline {
+  width: 38px !important;
+  height: 26px !important;
+  font-size: 0.9rem !important;
+  padding: 2px !important;
+  line-height: 1rem !important;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ece9ed;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d1cbd3;
+  border-radius: 10px;
+}
+
+.sidebar {
+  color: #000;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  margin: 24px !important;
+  min-height: 500px;
+  line-height: 1.8rem;
+  border-right: 1px solid rgba(155, 165, 182, 0.3);
+  min-width: 400px;
+  width: 400px !important;
+}
+.row {
+  min-height: 35px;
+}
+
+.column.title {
+  font-weight: bold;
+}
+
+.row.content {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: calc(100vh - 135px);
+}
+
+.page-content {
+  overflow-y: auto;
+  min-height: 500px;
+}
+
+td,
+th {
+  padding: 0.8rem;
+}
+
+tbody tr:hover {
+  background-color: #f5f0f8;
+}
+.employee-id-link {
+  line-height: 1rem !important;
+  height: 14px !important;
+  font-size: 12px !important;
+  padding: 0 0.5rem !important;
+}
+
+.footer {
+  margin: 24px !important;
+  color: #8f8597;
+}
+
+.action-icon {
+  padding-left: 10px;
+  color: #767481;
+}
+
+.form-row {
+  margin-bottom: 10px;
+}
+
+.form-label {
+  margin-right: 10px;
+  text-align: left;
+}
+
+.form-title {
+  font-weight: bold;
+  text-align: left;
+}
+
+label.required::after {
+  content: '*';
+  color: rgba(235, 8, 8, 0.863);
+  margin-left: 3px;
+  font-weight: bold;
+}
+
+.form-field {
+  min-width: 100px;
+}
+
+.form-button {
+  margin-right: 10px;
+}
+
+.error-message {
+  color: rgba(235, 8, 8, 0.863);
+  font-size: 12px;
+  padding-bottom: 2px;
+  display: block;
+  position: relative;
+  top: -12px;
+}
+
+.form-message {
+  margin: 10px;
+}
+
+.employee-table {
+  display: grid;
+  grid-template-rows: 30px;
+  grid-auto-rows: 30px;
+  font-size: 16px;
+  overflow-x: auto;
+  overflow-y: auto;
+  height: 100%;
+}
+
+@media (min-width: 40rem) {
+  .row {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    padding-right: 24px;
+  }
+
+  .hierarchy-container .row {
+    flex-direction: row;
+  }
+  .sidebar {
+    border-right: none;
+    min-width: 100%;
+  }
+
+  .row.content {
+    margin-right: 24px;
+    overflow-y: auto;
+  }
+}

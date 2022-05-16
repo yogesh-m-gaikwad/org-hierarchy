@@ -1,6 +1,21 @@
-import React from "react";
-import { render } from "react-dom";
+import 'milligram';
+import './style.css';
 
-import App from "./components/App";
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
-render(<App />, document.getElementById("root"));
+import App from './components/App';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
+  <React.StrictMode>
+    <HashRouter>
+      <Routes>
+        <Route path="*" element={<App />} />
+      </Routes>
+    </HashRouter>
+  </React.StrictMode>
+);

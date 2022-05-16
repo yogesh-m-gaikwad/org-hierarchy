@@ -1,11 +1,21 @@
 {
   "name": "org-hierarchy",
   "version": "1.0.0",
-  "description": "React Application to visuaize organization hierarchy on UI",
+  "description": "React Application to visualize organization hierarchy on UI",
   "main": "index.js",
+  "homepage": "https://github.com/yogesh-m-gaikwad/org-hierarchy",
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
+    ]
+  },
   "scripts": {
     "start": "webpack-dev-server --mode=development --open --hot",
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=production --config prod.config.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "jest"
   },
   "keywords": [
@@ -19,13 +29,26 @@
   "author": "Yogesh Gaikwad",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
+    "gh-pages": "^4.0.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "milligram": "^1.4.1",
+    "prop-types": "^15.8.1",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react-dom": "^18.1.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
+    "@babel/plugin-transform-runtime": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-react": "^7.16.7",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
+    "@testing-library/user-event": "^14.2.0",
     "babel-jest": "^28.1.0",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
