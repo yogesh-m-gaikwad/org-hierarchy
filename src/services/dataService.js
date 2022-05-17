@@ -141,6 +141,7 @@ export const promoteTeamLeader = async (employee, deleteFlag, employeesData) => 
     type: oldHead.type,
     position: oldHead.position,
     teams: oldHead.teams,
+    order: oldHead.order,
   };
 
   let oldMembers = filter(employeesData, (e) => e.parent_id === employee._id);
