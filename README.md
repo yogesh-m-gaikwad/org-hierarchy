@@ -7,7 +7,7 @@ The application is deployed at [GitHub Page](https://yogesh-m-gaikwad.github.io/
 ## Table of Content:
 
 - [Setup](#setup)
-- [Approach](#approach)
+
 
 ## Setup
 
