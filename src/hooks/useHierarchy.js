@@ -9,7 +9,7 @@ import { useContext } from 'react';
  * @returns The hierarchy state and its setState from context.
  */
 export const useHierarchy = () => {
-  const { hierarchy, setHierarchy } = useContext(HierarchyContext);
+  const { hierarchy, setHierarchy, appMessage, setAppMessage } = useContext(HierarchyContext);
 
   const reloadHierarchy = async () => {
     setHierarchy(generateHierarchy(employeesData, teamsData));
@@ -19,5 +19,5 @@ export const useHierarchy = () => {
     setHierarchy(filterHierarchyData(employeesData, teamsData, filterString));
   };
 
-  return [hierarchy, setHierarchy, reloadHierarchy, filterHierarchy];
+  return [hierarchy, setHierarchy, reloadHierarchy, filterHierarchy, appMessage, setAppMessage];
 };

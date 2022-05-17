@@ -25,7 +25,8 @@ export const EmployeeEditPage = ({
   onMoveEmployee,
   onRemoveEmployee,
 }) => {
-  const [_hierarchy, setHierarchy, reloadHierarchy] = useHierarchy();
+  const [_hierarchy, _setHierarchy, reloadHierarchy, _filterHierarchy, appMessage, setAppMessage] =
+    useHierarchy();
   const [errors, setErrors] = useState({});
   const [moveTeamError, setMoveTeamError] = useState({});
   const [formMessage, setFormMessage] = useState(null);
@@ -35,6 +36,19 @@ export const EmployeeEditPage = ({
   const showDelete = employee.type !== ORG_MAIN;
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    let timer;
+    timer = setTimeout(() => {
+      setAppMessage('');
+    }, 2500);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [appMessage]);
 
   useEffect(() => {
     isValidData(employee);
@@ -166,8 +180,12 @@ export const EmployeeEditPage = ({
                 // Check for field validations return on failure
                 if (!isValidData(employee)) return;
 
-                const response = onSaveEmployee(employee);
-                reloadHierarchy();
+                onSaveEmployee(employee).then((response) => {
+                  reloadHierarchy();
+                  if (response && response.status === 'success') {
+                    setAppMessage({ text: response.message, type: 'success' });
+                  }
+                });
               }}
             >
               Save
@@ -193,6 +211,9 @@ export const EmployeeEditPage = ({
 
                   onPromoteEmployee(employee).then((response) => {
                     reloadHierarchy();
+                    if (response && response.status === 'success') {
+                      setFormMessage({ text: response.message, type: 'success' });
+                    }
                   });
                 }}
               >
@@ -206,7 +227,7 @@ export const EmployeeEditPage = ({
                 title="Delete Employee"
                 onClick={(e) => {
                   onRemoveEmployee(employee).then((response) => {
-                    if (response && response.data === 'error') {
+                    if (response && response.status === 'error') {
                       setFormMessage({ text: response.message, type: 'error' });
                     } else {
                       reloadHierarchy();
@@ -224,6 +245,10 @@ export const EmployeeEditPage = ({
           {formMessage && (
             <label className={`${formMessage.type}-message form-message`}>{formMessage.text}</label>
           )}
+
+          {appMessage && (
+            <label className={`${appMessage.type}-message form-message`}>{appMessage.text}</label>
+          )}
         </div>
       </div>
       <br></br>
@@ -240,11 +265,15 @@ export const EmployeeEditPage = ({
             </div>
             <div className="column column-70">
               <select
+                placeholder="Please select a Team"
                 style={{ width: 350, marginRight: 10 }}
                 onChange={(e) => {
                   setNewTeamId(e.target.value);
                 }}
               >
+                <option key="default" value="">
+                  Please select a team
+                </option>
                 {filteredTeams.map((t) => (
                   <option key={t.key} value={t.key}>
                     {t.teamName}
