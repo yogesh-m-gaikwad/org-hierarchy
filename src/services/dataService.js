@@ -160,15 +160,15 @@ export const promoteTeamLeader = async (employee, deleteFlag, employeesData) => 
     keys.forEach((key) => {
       employeesData[key] = { ...employeesData[key], parent_id: newRandomTeamMember._id };
     });
+  }
 
-    let oldTeams = filter(teamsData, (e) => e.manager_id === oldHead._id);
-    Object.keys(oldTeams).forEach((key) => {
-      teamsData[key] = { ...teamsData[key], manager_id: employee._id };
-    });
+  let oldTeams = filter(teamsData, (e) => e.manager_id === oldHead._id);
+  Object.keys(oldTeams).forEach((key) => {
+    teamsData[key] = { ...teamsData[key], manager_id: employee._id };
+  });
 
-    if (deleteFlag) {
-      delete employeesData[oldHead._id];
-    }
+  if (deleteFlag) {
+    delete employeesData[oldHead._id];
   }
 };
 
@@ -207,7 +207,7 @@ export const promoteEmployee = async (employee) => {
       delete employeesData[oldParent._id];
     } else if (employee.type === TEAM_HEAD) {
       let response = await getEmployeeById(employee.parent_id);
-      let oldParent = response.data;
+      let orgHead = response.data;
 
       let teamLeaderReplacement = getRandomTeamLeader(employee._id);
 
@@ -218,43 +218,43 @@ export const promoteEmployee = async (employee) => {
         // promote random team leader without deleting manager
         await promoteTeamLeader(randomTeamLeader, false, employeesData);
 
-        let oldMembers = filter(employeesData, (e) => e.parent_id === oldParent._id);
+        let oldMembers = filter(employeesData, (e) => e.parent_id === orgHead._id);
         Object.keys(oldMembers).forEach((key) => {
           employeesData[key] = { ...employeesData[key], parent_id: employee._id };
         });
 
-        let oldTeams = filter(teamsData, (e) => e.manager_id === oldParent._id);
+        let oldTeams = filter(teamsData, (e) => e.manager_id === orgHead._id);
         Object.keys(oldTeams).forEach((key) => {
           teamsData[key] = { ...teamsData[key], manager_id: employee._id };
         });
 
         employeesData[employee._id] = {
           ...employee,
-          parent_id: oldParent.parent_id,
-          type: oldParent.type,
-          position: oldParent.position,
+          parent_id: orgHead.parent_id,
+          type: orgHead.type,
+          position: orgHead.position,
           teams: [],
         };
 
         delete employeesData[employee._id].teams;
-        delete employeesData[oldParent._id];
+        delete employeesData[orgHead._id];
       } else {
         // delete all teams as there is no team leader found for this team head and promote
         for (const teamId of employeesData[managerId].teams) {
           delete teamsData[teamId];
         }
 
-        let oldMembers = filter(employeesData, (e) => e.parent_id === oldParent._id);
+        let oldMembers = filter(employeesData, (e) => e.parent_id === orgHead._id);
         Object.keys(oldMembers).forEach((key) => {
           employeesData[key] = { ...employeesData[key], parent_id: employee._id };
         });
 
-        let oldTeams = filter(teamsData, (e) => e.manager_id === oldParent._id);
+        let oldTeams = filter(teamsData, (e) => e.manager_id === orgHead._id);
         Object.keys(oldTeams).forEach((key) => {
           teamsData[key] = { ...teamsData[key], manager_id: employee._id };
         });
 
-        delete employeesData[oldParent._id];
+        delete employeesData[orgHead._id];
       }
     }
 
