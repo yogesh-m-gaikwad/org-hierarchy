@@ -33,6 +33,7 @@ Builds the app for production to the `build` folder.<br>
 - Promoting a member at any level will select a replacement randomly - this can have separate flow
 - Filter is available in tree this will show parents that include a matched child entry
 - As the db us local storage pagination of tables is not implemented.
+- Hash Router is used as the application was to be deployed on GitHub Pages and there are known issues with BrowserRouter on GitHub Pages.
 
 ## User Guide
 

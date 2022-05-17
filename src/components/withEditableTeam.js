@@ -64,7 +64,7 @@ const withEditableTeam = (Component, teamId, employeeId) => {
     const onRemoveTeam = async () => {
       const response = await deleteTeam(team);
 
-      if (response && response.data === 'success') {
+      if (response && response.status === 'success') {
         setOriginalTeam(null);
         setTeam(null);
         navigate(`/`);

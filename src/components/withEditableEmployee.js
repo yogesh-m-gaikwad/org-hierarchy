@@ -76,7 +76,7 @@ const withEditableEmployee = (Component, employeeId, teamId) => {
     const onRemoveEmployee = async () => {
       const response = await deleteEmployee(employee);
 
-      if (response.data === 'success') {
+      if (response.status === 'success') {
         setOriginalEmployee(null);
         setEmployee(null);
         // TODO: show success message

@@ -10,13 +10,27 @@ import { useHierarchy } from '../hooks/useHierarchy';
  * @returns TeamEditPage Component.
  */
 export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRemoveTeam }) => {
-  const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
+  const [_hierarchy, _setHierarchy, reloadHierarchy, _filterHierarchy, appMessage, setAppMessage] =
+    useHierarchy();
   const [errors, setErrors] = useState({});
   const [formMessage, setFormMessage] = useState(null);
 
   useEffect(() => {
     isValidData(team);
   }, [team]);
+
+  useEffect(() => {
+    let timer;
+    timer = setTimeout(() => {
+      setAppMessage('');
+    }, 2500);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [appMessage]);
 
   const isValidData = (team) => {
     let errors = {};
@@ -93,8 +107,11 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
               // Check for field validations return on failure
               if (!isValidData(team)) return;
 
-              onSaveTeam(team).then(() => {
+              onSaveTeam(team).then((response) => {
                 reloadHierarchy();
+                if (response && response.status === 'success') {
+                  setAppMessage({ text: response.message, type: 'success' });
+                }
               });
             }}
           >
@@ -120,7 +137,7 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
             title="Delete Team"
             onClick={(e) => {
               onRemoveTeam(team).then((response) => {
-                if (response && response.data === 'error') {
+                if (response && response.status === 'error') {
                   setFormMessage({ text: response.message, type: 'error' });
                 } else {
                   reloadHierarchy();
@@ -135,6 +152,9 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
       <div className="row">
         {formMessage && (
           <label className={`${formMessage.type}-message form-message`}>{formMessage.text}</label>
+        )}
+        {appMessage && (
+          <label className={`${appMessage.type}-message form-message`}>{appMessage.text}</label>
         )}
       </div>
     </div>

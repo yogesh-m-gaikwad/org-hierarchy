@@ -6,6 +6,8 @@ import { createContext } from 'react';
 export const HierarchyContext = createContext({
   hierarchy: {},
   setHierarchy: () => {},
+  appMessage: null,
+  setAppMessage: () => {},
 });
 
 export default HierarchyContext;

@@ -2,6 +2,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react';
 
 import EmployeePageLoader from './EmployeePageLoader';
+import ErrorPageNotFound from '../pages/ErrorPageNotFount';
 import FilterBar from './FilterBar';
 import HierarchyContext from '../hooks/HierarchyContext';
 import HierarchyLoader from './HierarchyLoader';
@@ -17,9 +18,10 @@ import { fetchDataFromLocalStorage } from '../services/dataService';
  */
 const App = () => {
   const [hierarchy, setHierarchy] = useState(null);
+  const [appMessage, setAppMessage] = useState(null);
 
   return (
-    <HierarchyContext.Provider value={{ hierarchy, setHierarchy }}>
+    <HierarchyContext.Provider value={{ hierarchy, setHierarchy, appMessage, setAppMessage }}>
       <div className="container main-layout">
         <div className="row header">
           <div className="column">
@@ -55,6 +57,7 @@ const App = () => {
               <Route path="/edit/team/:teamId" element={<TeamPageLoader mode="edit" />} />
               <Route path="/add/team/:managerId" element={<TeamPageLoader mode="add" />} />
               <Route path="/team/list/:id" element={<TeamMembersListPage />} />
+              <Route path="*" element={<ErrorPageNotFound />} />
             </Routes>
           </div>
         </div>

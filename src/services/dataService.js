@@ -80,7 +80,11 @@ export const addEmployee = async (employee, teamId) => {
     localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
   }
 
-  return { data: employeesData[employee._id] };
+  return {
+    data: employeesData[employee._id],
+    message: 'Employee added successfully',
+    status: 'success',
+  };
 };
 
 /**
@@ -94,7 +98,11 @@ export const updateEmployee = async (employee) => {
     localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
   }
 
-  return { data: employeesData[employee._id] };
+  return {
+    data: employeesData[employee._id],
+    message: 'Employee saved successfully',
+    status: 'success',
+  };
 };
 
 /**
@@ -110,7 +118,11 @@ export const moveEmployee = async (employee, newTeamId) => {
     localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
   }
 
-  return { data: employeesData[employee._id] };
+  return {
+    data: employeesData[employee._id],
+    message: 'Employee moved to new team successfully',
+    status: 'success',
+  };
 };
 
 /**
@@ -249,7 +261,11 @@ export const promoteEmployee = async (employee) => {
     localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
   }
 
-  return { data: employeesData[employee._id] };
+  return {
+    data: employeesData[employee._id],
+    message: 'Employee promoted successfully',
+    status: 'success',
+  };
 };
 
 /**
@@ -263,7 +279,7 @@ export const deleteEmployee = async (employee) => {
     if (employeesData[employee._id].type == TEAM_MEMBER) {
       delete employeesData[employee._id];
       localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
-      return { data: 'success', message: 'Successfully deleted employee.' };
+      return { status: 'success', message: 'Successfully deleted employee.' };
     }
 
     if (employeesData[employee._id].type == TEAM_LEADER) {
@@ -275,22 +291,22 @@ export const deleteEmployee = async (employee) => {
 
       delete employeesData[employee._id];
       localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
-      return { data: 'success', message: 'Successfully deleted team leader and members.' };
+      return { status: 'success', message: 'Successfully deleted team leader and members.' };
     } else if (employeesData[employee._id].type == TEAM_HEAD) {
       if (employeesData[employee._id].teams.length === 0) {
         delete employeesData[employee._id];
         localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
-        return { data: 'success', message: 'Successfully deleted employee.' };
+        return { status: 'success', message: 'Successfully deleted employee.' };
       } else {
         return {
-          data: 'error',
+          status: 'error',
           message:
             'You can only delete team lead and members. Promote a existing team leader from child teams to remove department head.',
         };
       }
     } else {
       return {
-        data: 'error',
+        status: 'error',
         message:
           'You can only delete team lead and members. Promote a existing team leader from child teams to remove department head.',
       };
@@ -352,7 +368,7 @@ export const addTeam = async (team) => {
     updateEmployee(manager);
   }
 
-  return { data: teamsData[team._id] };
+  return { data: teamsData[team._id], message: 'Team added successfully', status: 'success' };
 };
 
 /**
@@ -366,7 +382,7 @@ export const updateTeam = async (team) => {
     localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
   }
 
-  return { data: teamsData[team._id] };
+  return { data: teamsData[team._id], message: 'Team saved successfully', status: 'success' };
 };
 
 /**
@@ -387,13 +403,13 @@ export const deleteTeam = async (team) => {
 
       localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
       localStorage.setItem(EMPLOYEES_DATA_KEY, JSON.stringify(employeesData));
-      return { data: 'success', message: 'Successfully deleted team.' };
+      return { status: 'success', message: 'Team deleted successfully' };
     } else {
-      return { data: 'error', message: 'You can only delete teams without any members.' };
+      return { status: 'error', message: 'You can only delete teams without any members.' };
     }
   }
 
-  return { data: 'error', message: 'Invalid Team Id' };
+  return { status: 'error', message: 'Invalid Team Id' };
 };
 
 /**
