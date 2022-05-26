@@ -42,7 +42,6 @@ export const EmployeeEditPage = () => {
 
   useEffect(() => {
     (async () => {
-      console.log('params.employeeId:' + params.employeeId);
       if (params.employeeId) {
         const response = await getEmployeeById(params.employeeId);
         setOriginalEmployee(response.data);
