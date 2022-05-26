@@ -25,7 +25,6 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      console.log('App: loading hierarchy!');
       const data = await fetchDataFromLocalStorage();
       setHierarchy(data);
     })();
