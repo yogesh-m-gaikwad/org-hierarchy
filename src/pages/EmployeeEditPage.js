@@ -5,37 +5,93 @@ import {
   TEAM_MEMBER,
 } from '../utils/constants';
 import React, { useEffect, useState } from 'react';
+import {
+  deleteEmployee,
+  getAllowedTeams,
+  getEmployeeById,
+  moveEmployee,
+  promoteEmployee,
+  updateEmployee,
+} from '../services/dataService';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { getAllowedTeams } from '../services/dataService';
 import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
-import { useNavigate } from 'react-router-dom';
 
 /**
  * Edit employee details page.
  * @param {*} props
  * @returns EmployeeEditPage Component.
  */
-export const EmployeeEditPage = ({
-  employee,
-  onChangeEmployee,
-  onResetEmployee,
-  onSaveEmployee,
-  onPromoteEmployee,
-  onMoveEmployee,
-  onRemoveEmployee,
-}) => {
+export const EmployeeEditPage = () => {
   const [_hierarchy, _setHierarchy, reloadHierarchy, _filterHierarchy, appMessage, setAppMessage] =
     useHierarchy();
+  let navigate = useNavigate();
+  const params = useParams();
+  const [originalEmployee, setOriginalEmployee] = useState(null);
+  const [employee, setEmployee] = useState(null);
+
   const [errors, setErrors] = useState({});
   const [moveTeamError, setMoveTeamError] = useState({});
   const [formMessage, setFormMessage] = useState(null);
   const [filteredTeams, setFilteredTeams] = useState([]);
   const [newTeamId, setNewTeamId] = useState(null);
-  const showPromote = employee.type !== ORG_MAIN;
-  const showDelete = employee.type !== ORG_MAIN;
 
-  let navigate = useNavigate();
+  const showPromote = employee && employee.type !== ORG_MAIN;
+  const showDelete = employee && employee.type !== ORG_MAIN;
+
+  useEffect(() => {
+    (async () => {
+      console.log('params.employeeId:' + params.employeeId);
+      if (params.employeeId) {
+        const response = await getEmployeeById(params.employeeId);
+        setOriginalEmployee(response.data);
+        setEmployee(response.data);
+      }
+    })();
+  }, []);
+
+  const onResetEmployee = async () => {
+    setEmployee(originalEmployee);
+  };
+
+  const onSaveEmployee = async () => {
+    const response = await updateEmployee(employee);
+    setOriginalEmployee(response.data);
+    setEmployee(response.data);
+    return response;
+  };
+
+  const onMoveEmployee = async (newTeamId) => {
+    const response = await moveEmployee(employee, newTeamId);
+    setOriginalEmployee(response.data);
+    setEmployee(response.data);
+    return response;
+  };
+
+  const onPromoteEmployee = async () => {
+    const response = await promoteEmployee(employee);
+    setOriginalEmployee(response.data);
+    setEmployee(response.data);
+    return response;
+  };
+
+  const onRemoveEmployee = async () => {
+    const response = await deleteEmployee(employee);
+
+    if (response.status === 'success') {
+      setOriginalEmployee(null);
+      setEmployee(null);
+      // TODO: show success message
+      return response;
+    } else {
+      return response;
+    }
+  };
+
+  const onChangeEmployee = async (changes) => {
+    setEmployee({ ...employee, ...changes });
+  };
 
   useEffect(() => {
     let timer;
@@ -51,11 +107,13 @@ export const EmployeeEditPage = ({
   }, [appMessage]);
 
   useEffect(() => {
-    isValidData(employee);
-    (async () => {
-      let allowedTeams = await getAllowedTeams(employee._id);
-      setFilteredTeams(allowedTeams);
-    })();
+    if (employee) {
+      isValidData(employee);
+      (async () => {
+        let allowedTeams = await getAllowedTeams(employee._id);
+        setFilteredTeams(allowedTeams);
+      })();
+    }
   }, [employee]);
 
   const isValidData = (employee) => {
@@ -92,6 +150,10 @@ export const EmployeeEditPage = ({
       return false;
     }
   };
+
+  if (!employee) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

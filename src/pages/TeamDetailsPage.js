@@ -1,13 +1,29 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { getTeamById } from '../services/dataService';
 
 /**
  * Team details page.
- * @param {*} props
  * @returns TeamDetailsPage Component.
  */
-const TeamDetailsPage = ({ team }) => {
+const TeamDetailsPage = () => {
+  const [team, setTeam] = useState(null);
+  let params = useParams();
   let navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (params.teamId) {
+        const response = await getTeamById(params.teamId);
+        setTeam(response.data);
+      }
+    })();
+  }, []);
+
+  if (!team) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container">

@@ -1,16 +1,31 @@
 import { ORG_MAIN, TEAM_HEAD } from '../utils/constants';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { getEmployeeById } from '../services/dataService';
 
 /**
  * Employee details page.
  * @param {*} props
  * @returns EmployeeDetailsPage Component.
  */
-export const EmployeeDetailsPage = ({ employee }) => {
-  let navigate = useNavigate();
-  let showListButton = employee.type === ORG_MAIN || employee.type === TEAM_HEAD;
+export const EmployeeDetailsPage = () => {
+  const navigate = useNavigate();
+  const params = useParams();
+  const [employee, setEmployee] = useState(null);
+
+  let showListButton = employee && (employee.type === ORG_MAIN || employee.type === TEAM_HEAD);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getEmployeeById(params.employeeId);
+      setEmployee(response.data);
+    })();
+  }, []);
+
+  if (!employee) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container">

@@ -1,14 +1,17 @@
 import { Link, Route, Routes } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import EmployeePageLoader from './EmployeePageLoader';
+import EmployeeAddPage from '../pages/EmployeeAddPage';
+import EmployeeDetailsPage from '../pages/EmployeeDetailsPage';
+import EmployeeEditPage from '../pages/EmployeeEditPage';
 import ErrorPageNotFound from '../pages/ErrorPageNotFount';
 import FilterBar from './FilterBar';
+import HierarchyComponent from './HierarchyComponent';
 import HierarchyContext from '../hooks/HierarchyContext';
-import HierarchyLoader from './HierarchyLoader';
-import HierarchyNodeRecursive from './HierarchyNodeRecursive';
+import TeamAddPage from '../pages/TeamAddPage';
+import TeamDetailsPage from '../pages/TeamDetailsPage';
+import TeamEditPage from '../pages/TeamEditPage';
 import TeamMembersListPage from '../pages/TeamMembersListPage';
-import TeamPageLoader from './TeamPageLoader';
 import WelcomePage from '../pages/WelcomePage';
 import { fetchDataFromLocalStorage } from '../services/dataService';
 
@@ -19,6 +22,14 @@ import { fetchDataFromLocalStorage } from '../services/dataService';
 const App = () => {
   const [hierarchy, setHierarchy] = useState(null);
   const [appMessage, setAppMessage] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      console.log('App: loading hierarchy!');
+      const data = await fetchDataFromLocalStorage();
+      setHierarchy(data);
+    })();
+  }, []);
 
   return (
     <HierarchyContext.Provider value={{ hierarchy, setHierarchy, appMessage, setAppMessage }}>
@@ -34,9 +45,7 @@ const App = () => {
           <div className="column sidebar">
             <FilterBar></FilterBar>
             <div className="row hierarchy-container">
-              <HierarchyLoader getData={fetchDataFromLocalStorage}>
-                <HierarchyNodeRecursive />
-              </HierarchyLoader>
+              <HierarchyComponent data={hierarchy} />
             </div>
           </div>
           <div
@@ -47,15 +56,12 @@ const App = () => {
           >
             <Routes>
               <Route path="/" element={<WelcomePage />} />
-              <Route path="/employee/:employeeId" element={<EmployeePageLoader mode="show" />} />
-              <Route
-                path="/edit/employee/:employeeId"
-                element={<EmployeePageLoader mode="edit" />}
-              />
-              <Route path="/add/employee/:teamId" element={<EmployeePageLoader mode="add" />} />
-              <Route path="/team/:teamId" element={<TeamPageLoader mode="show" />} />
-              <Route path="/edit/team/:teamId" element={<TeamPageLoader mode="edit" />} />
-              <Route path="/add/team/:managerId" element={<TeamPageLoader mode="add" />} />
+              <Route path="/employee/:employeeId" element={<EmployeeDetailsPage />} />
+              <Route path="/edit/employee/:employeeId" element={<EmployeeEditPage />} />
+              <Route path="/add/employee/:teamId" element={<EmployeeAddPage />} />
+              <Route path="/team/:teamId" element={<TeamDetailsPage />} />
+              <Route path="/edit/team/:teamId" element={<TeamEditPage />} />
+              <Route path="/add/team/:managerId" element={<TeamAddPage />} />
               <Route path="/team/list/:id" element={<TeamMembersListPage />} />
               <Route path="*" element={<ErrorPageNotFound />} />
             </Routes>

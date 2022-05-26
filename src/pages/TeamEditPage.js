@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { getEmployeeById, getTeamById } from '../services/dataService';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { EMAIL_VALIDATION_REGEX } from '../utils/constants';
 import { hasNoErrors } from '../utils/utils';
@@ -6,17 +8,35 @@ import { useHierarchy } from '../hooks/useHierarchy';
 
 /**
  * Edit Team details page.
- * @param {*} props
  * @returns TeamEditPage Component.
  */
-export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRemoveTeam }) => {
+export const TeamEditPage = () => {
   const [_hierarchy, _setHierarchy, reloadHierarchy, _filterHierarchy, appMessage, setAppMessage] =
     useHierarchy();
   const [errors, setErrors] = useState({});
   const [formMessage, setFormMessage] = useState(null);
+  const [originalTeam, setOriginalTeam] = useState(null);
+  const [team, setTeam] = useState(null);
+  const [parentEmployee, setParentEmployee] = useState(null);
+  let navigate = useNavigate();
+  let params = useParams();
 
   useEffect(() => {
-    isValidData(team);
+    (async () => {
+      if (params.teamId) {
+        let response = await getTeamById(params.teamId);
+        setOriginalTeam(response.data);
+        setTeam(response.data);
+        response = await getEmployeeById(response.data.managerId);
+        setParentEmployee(response.data);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (team) {
+      isValidData(team);
+    }
   }, [team]);
 
   useEffect(() => {
@@ -31,6 +51,42 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
       }
     };
   }, [appMessage]);
+
+  const onChangeTeam = async (changes) => {
+    setTeam({ ...team, ...changes });
+  };
+
+  const onResetTeam = async () => {
+    setTeam(originalTeam);
+  };
+
+  const onSaveTeam = async () => {
+    const response = await updateTeam(team);
+    setOriginalTeam(response.data);
+    setTeam(response.data);
+
+    return response;
+  };
+
+  const onAddTeam = async () => {
+    const response = await addTeam(team);
+    setOriginalTeam(response.data);
+    setTeam(response.data);
+
+    return response;
+  };
+
+  const onRemoveTeam = async () => {
+    const response = await deleteTeam(team);
+
+    if (response && response.status === 'success') {
+      setOriginalTeam(null);
+      setTeam(null);
+      navigate(`/`);
+    } else {
+      return response;
+    }
+  };
 
   const isValidData = (team) => {
     let errors = {};
@@ -54,6 +110,10 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
       return false;
     }
   };
+
+  if (!team) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container">

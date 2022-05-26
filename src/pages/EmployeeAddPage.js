@@ -1,18 +1,42 @@
 import { EMAIL_VALIDATION_REGEX, PHONE_VALIDATION_REGEX } from '../utils/constants';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { addEmployee, getTeamById } from '../services/dataService';
+import { getEmptyEmployeeToAdd, hasNoErrors } from '../utils/utils';
 
-import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
+import { useParams } from 'react-router-dom';
 
 /**
  * Add new employee page.
  * @param {*} props
  * @returns EmployeeAddPage Component.
  */
-export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmployee }) => {
+export const EmployeeAddPage = () => {
+  const params = useParams();
   const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   const [errors, setErrors] = useState({});
+  const emptyEmployee = getEmptyEmployeeToAdd();
+  const [employee, setEmployee] = useState(emptyEmployee);
+  const [parentTeam, setParentTeam] = useState(null);
   const [formMessage, setFormMessage] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let response = await getTeamById(params.teamId);
+      setParentTeam(response.data);
+    })();
+  }, []);
+
+  const onChangeEmployee = async (changes) => {
+    setEmployee({ ...employee, ...changes });
+  };
+
+  const onAddEmployee = async () => {
+    if (!isValidData(employee)) return;
+    await addEmployee(employee, parentTeam._id);
+    reloadHierarchy();
+    setEmployee(getEmptyEmployeeToAdd());
+  };
 
   const isValidData = (employee) => {
     let errors = {};
@@ -49,10 +73,14 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
     }
   };
 
+  if (!parentTeam) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="container">
       <div className="row">
-        <h4 className="column form-title">Add New Team Member - {team.name}</h4>
+        <h4 className="column form-title">Add New Team Member - {parentTeam.name}</h4>
       </div>
       <br></br>
       <div className="row">
@@ -129,13 +157,7 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
             className="form-button"
             type="button"
             title="Add New Employee"
-            onClick={(e) => {
-              if (!isValidData(employee)) return;
-
-              onAddEmployee(team._id).then((response) => {
-                reloadHierarchy();
-              });
-            }}
+            onClick={onAddEmployee}
           >
             Add
           </button>
