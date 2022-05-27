@@ -19,7 +19,7 @@ const TeamDetailsPage = () => {
         setTeam(response.data);
       }
     })();
-  }, []);
+  }, [params]);
 
   if (!team) {
     return <div>Loading...</div>;

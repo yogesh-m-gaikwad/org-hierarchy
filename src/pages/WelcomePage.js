@@ -7,7 +7,6 @@ import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Welcome Page for application.
- * @param {*} props
  * @returns WelcomePage Component.
  */
 const WelcomePage = () => {

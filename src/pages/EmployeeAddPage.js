@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom';
 
 /**
  * Add new employee page.
- * @param {*} props
  * @returns EmployeeAddPage Component.
  */
 export const EmployeeAddPage = () => {
@@ -25,7 +24,7 @@ export const EmployeeAddPage = () => {
       let response = await getTeamById(params.teamId);
       setParentTeam(response.data);
     })();
-  }, []);
+  }, [params]);
 
   const onChangeEmployee = async (changes) => {
     setEmployee({ ...employee, ...changes });

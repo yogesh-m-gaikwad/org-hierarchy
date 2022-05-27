@@ -6,7 +6,6 @@ import { getEmployeeById } from '../services/dataService';
 
 /**
  * Employee details page.
- * @param {*} props
  * @returns EmployeeDetailsPage Component.
  */
 export const EmployeeDetailsPage = () => {
@@ -21,7 +20,7 @@ export const EmployeeDetailsPage = () => {
       const response = await getEmployeeById(params.employeeId);
       setEmployee(response.data);
     })();
-  }, []);
+  }, [params]);
 
   if (!employee) {
     return <div>Loading...</div>;

@@ -20,7 +20,6 @@ import { useHierarchy } from '../hooks/useHierarchy';
 
 /**
  * Edit employee details page.
- * @param {*} props
  * @returns EmployeeEditPage Component.
  */
 export const EmployeeEditPage = () => {
@@ -48,7 +47,7 @@ export const EmployeeEditPage = () => {
         setEmployee(response.data);
       }
     })();
-  }, []);
+  }, [params]);
 
   const onResetEmployee = async () => {
     setEmployee(originalEmployee);

@@ -31,7 +31,7 @@ export const TeamEditPage = () => {
         setParentEmployee(response.data);
       }
     })();
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     if (team) {

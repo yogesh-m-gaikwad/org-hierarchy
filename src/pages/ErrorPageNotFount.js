@@ -2,7 +2,6 @@ import React from 'react';
 
 /**
  * Error 404 Page for application.
- * @param {*} props
  * @returns ErrorPageNotFound Component.
  */
 const ErrorPageNotFound = () => {

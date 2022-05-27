@@ -26,7 +26,7 @@ export const TeamAddPage = () => {
         setTeam(getEmptyTeamToAdd());
       }
     })();
-  }, []);
+  }, [params]);
 
   const onAddTeam = async () => {
     const response = await addTeam(team);

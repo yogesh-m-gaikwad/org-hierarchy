@@ -1,10 +1,10 @@
+import { TEAM, TEAM_MEMBER } from '../utils/constants';
 import { faPenToSquare, faRectangleList } from '@fortawesome/free-regular-svg-icons';
 import { getTruncateLength, isObject } from '../utils/utils';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { TEAM } from '../utils/constants';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 /**
@@ -37,7 +37,9 @@ const HierarchyComponent = ({ data }) => {
       <>
         <div className={`row ${data.type} hierarchy-entry`} title={nodeName}>
           <div className="">
-            <FontAwesomeIcon icon={faCaretRight} style={{ paddingRight: 10, paddingBottom: 0 }} />
+            {data.type !== TEAM_MEMBER && (
+              <FontAwesomeIcon icon={faCaretRight} style={{ paddingRight: 10, paddingBottom: 0 }} />
+            )}
             <Link to={{ pathname: showUrl, state: { employee: data } }}>
               {truncate(nodeName, truncateAt)}
             </Link>

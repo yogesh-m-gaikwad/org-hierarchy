@@ -59,6 +59,7 @@ button#refresh {
   overflow-y: auto;
   overflow-x: hidden;
   flex-direction: column !important;
+  padding-bottom: 10px;
   min-height: 70vh;
   height: 700px;
 }
