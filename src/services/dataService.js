@@ -320,7 +320,9 @@ export const deleteEmployee = async (employee) => {
 };
 
 export const getTeamById = async (teamId) => {
-  return teamsData.hasOwnProperty(teamId) ? { data: teamsData[teamId] } : {};
+  return teamsData.hasOwnProperty(teamId)
+    ? { data: teamsData[teamId] }
+    : { message: 'Team not found', status: 'error' };
 };
 
 /**

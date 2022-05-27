@@ -16,7 +16,13 @@ const TeamDetailsPage = () => {
     (async () => {
       if (params.teamId) {
         const response = await getTeamById(params.teamId);
-        setTeam(response.data);
+
+        if (response.status === 'error') {
+          setFormMessage({ text: response.message, type: 'error' });
+        } else {
+          setFormMessage('');
+          setTeam(response.data);
+        }
       }
     })();
   }, [params]);

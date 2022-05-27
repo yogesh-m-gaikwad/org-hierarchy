@@ -19,76 +19,71 @@ const HierarchyComponent = ({ data }) => {
     return str.length > n ? str.substr(0, n - 1) + '...' : str;
   };
 
-  if (isObject(data)) {
-    const nodeName = `${data.name} ${data.position ? '(' + data.position + ')' : ''}`;
-    let editUrl = `/edit/employee/${data._id}`;
-    let showUrl = `/employee/${data._id}`;
+  if (!data) {
+    return <div className={`row main hierarchy-entry`}>No match found.</div>;
+  }
 
-    let truncateAt = getTruncateLength(data.type);
+  const nodeName = `${data.name} ${data.position ? '(' + data.position + ')' : ''}`;
+  let editUrl = `/edit/employee/${data._id}`;
+  let showUrl = `/employee/${data._id}`;
 
-    if (data.type === TEAM) {
-      editUrl = `/edit/team/${data._id}`;
-      showUrl = `/team/${data._id}`;
-    }
+  let truncateAt = getTruncateLength(data.type);
 
-    const navigateToEditPage = (e) => {
-      e.preventDefault();
-      navigate(editUrl);
-    };
+  if (data.type === TEAM) {
+    editUrl = `/edit/team/${data._id}`;
+    showUrl = `/team/${data._id}`;
+  }
 
-    const navigateToDetailsPage = (e) => {
-      e.preventDefault();
-      navigate(showUrl);
-    };
+  const navigateToEditPage = (e) => {
+    e.preventDefault();
+    navigate(editUrl);
+  };
 
-    if (!data) {
-      return <div className={`row main hierarchy-entry`}>No match found.</div>;
-    }
+  const navigateToDetailsPage = (e) => {
+    e.preventDefault();
+    navigate(showUrl);
+  };
 
-    return (
-      <>
-        <NavLink
-          className="hierarchy-row {({isActive}) => (isActive ? 'active' : '')}"
-          to={{ pathname: showUrl, state: { employee: data } }}
-        >
-          <div className={`row ${data.type} hierarchy-entry`} title={nodeName}>
-            <div className="">
-              {data.type !== TEAM_MEMBER && (
-                <FontAwesomeIcon
-                  icon={faCaretRight}
-                  style={{ paddingRight: 10, paddingBottom: 0 }}
-                />
-              )}
+  return (
+    <>
+      <NavLink
+        className="hierarchy-row {({isActive}) => (isActive ? 'active' : '')}"
+        to={{ pathname: showUrl, state: { employee: data } }}
+      >
+        <div className={`row ${data.type} hierarchy-entry`} title={nodeName}>
+          <div className="">
+            {data.type !== TEAM_MEMBER && (
+              <FontAwesomeIcon icon={faCaretRight} style={{ paddingRight: 10, paddingBottom: 0 }} />
+            )}
 
-              {truncate(nodeName, truncateAt)}
+            {truncate(nodeName, truncateAt)}
+          </div>
+          <div className="hierarchy-buttons">
+            <div
+              className="icon-container action-icon"
+              title="Edit"
+              onClick={navigateToEditPage}
+              to={{ pathname: editUrl, state: { employee: data } }}
+            >
+              <FontAwesomeIcon icon={faPenToSquare} />
             </div>
-            <div className="hierarchy-buttons">
-              <div
-                className="icon-container action-icon"
-                title="Edit"
-                onClick={navigateToEditPage}
-                to={{ pathname: editUrl, state: { employee: data } }}
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </div>
-              <div
-                className="icon-container action-icon"
-                title="Show Details"
-                onClick={navigateToDetailsPage}
-                to={{ pathname: showUrl, state: { employee: data } }}
-              >
-                <FontAwesomeIcon icon={faRectangleList} />
-              </div>
+            <div
+              className="icon-container action-icon"
+              title="Show Details"
+              onClick={navigateToDetailsPage}
+              to={{ pathname: showUrl, state: { employee: data } }}
+            >
+              <FontAwesomeIcon icon={faRectangleList} />
             </div>
           </div>
-        </NavLink>
-        {data.children &&
-          data.children.map((child, key) => {
-            return <HierarchyComponent data={child} key={key}></HierarchyComponent>;
-          })}
-      </>
-    );
-  }
+        </div>
+      </NavLink>
+      {data.children &&
+        data.children.map((child, key) => {
+          return <HierarchyComponent data={child} key={key}></HierarchyComponent>;
+        })}
+    </>
+  );
 };
 
 export default HierarchyComponent;

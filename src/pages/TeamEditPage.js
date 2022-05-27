@@ -58,7 +58,7 @@ export const TeamEditPage = () => {
         clearTimeout(timer);
       }
     };
-  }, [appMessage]);
+  }, [formMessage]);
 
   const onChangeTeam = async (changes) => {
     setTeam({ ...team, ...changes });
