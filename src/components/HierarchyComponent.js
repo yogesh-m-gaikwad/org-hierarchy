@@ -1,18 +1,20 @@
+import { NavLink, useNavigate } from 'react-router-dom';
 import { TEAM, TEAM_MEMBER } from '../utils/constants';
 import { faPenToSquare, faRectangleList } from '@fortawesome/free-regular-svg-icons';
 import { getTruncateLength, isObject } from '../utils/utils';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import React from 'react';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Loads the hierarchy recursively based on the json structure passed.
- * @param {*} object - team or employee row
+ * @param {*} data - team or employee row data
  * @returns List of rows as per the hierarchy.
  */
 const HierarchyComponent = ({ data }) => {
+  let navigate = useNavigate();
+
   const truncate = (str, n) => {
     return str.length > n ? str.substr(0, n - 1) + '...' : str;
   };
@@ -29,38 +31,57 @@ const HierarchyComponent = ({ data }) => {
       showUrl = `/team/${data._id}`;
     }
 
+    const navigateToEditPage = (e) => {
+      e.preventDefault();
+      navigate(editUrl);
+    };
+
+    const navigateToDetailsPage = (e) => {
+      e.preventDefault();
+      navigate(showUrl);
+    };
+
     if (!data) {
       return <div className={`row main hierarchy-entry`}>No match found.</div>;
     }
 
     return (
       <>
-        <div className={`row ${data.type} hierarchy-entry`} title={nodeName}>
-          <div className="">
-            {data.type !== TEAM_MEMBER && (
-              <FontAwesomeIcon icon={faCaretRight} style={{ paddingRight: 10, paddingBottom: 0 }} />
-            )}
-            <Link to={{ pathname: showUrl, state: { employee: data } }}>
+        <NavLink
+          className="hierarchy-row {({isActive}) => (isActive ? 'active' : '')}"
+          to={{ pathname: showUrl, state: { employee: data } }}
+        >
+          <div className={`row ${data.type} hierarchy-entry`} title={nodeName}>
+            <div className="">
+              {data.type !== TEAM_MEMBER && (
+                <FontAwesomeIcon
+                  icon={faCaretRight}
+                  style={{ paddingRight: 10, paddingBottom: 0 }}
+                />
+              )}
+
               {truncate(nodeName, truncateAt)}
-            </Link>
+            </div>
+            <div className="hierarchy-buttons">
+              <div
+                className="icon-container action-icon"
+                title="Edit"
+                onClick={navigateToEditPage}
+                to={{ pathname: editUrl, state: { employee: data } }}
+              >
+                <FontAwesomeIcon icon={faPenToSquare} />
+              </div>
+              <div
+                className="icon-container action-icon"
+                title="Show Details"
+                onClick={navigateToDetailsPage}
+                to={{ pathname: showUrl, state: { employee: data } }}
+              >
+                <FontAwesomeIcon icon={faRectangleList} />
+              </div>
+            </div>
           </div>
-          <div className="hierarchy-buttons">
-            <Link
-              className="action-icon"
-              title="Edit"
-              to={{ pathname: editUrl, state: { employee: data } }}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </Link>
-            <Link
-              className="action-icon"
-              title="Show Details"
-              to={{ pathname: showUrl, state: { employee: data } }}
-            >
-              <FontAwesomeIcon icon={faRectangleList} />
-            </Link>
-          </div>
-        </div>
+        </NavLink>
         {data.children &&
           data.children.map((child, key) => {
             return <HierarchyComponent data={child} key={key}></HierarchyComponent>;

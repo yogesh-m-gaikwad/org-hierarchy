@@ -1,6 +1,6 @@
 import { EMAIL_VALIDATION_REGEX, PHONE_VALIDATION_REGEX } from '../utils/constants';
 import React, { useEffect, useState } from 'react';
-import { addEmployee, getTeamById } from '../services/dataService';
+import { addEmployee, getTeamById, hasTeamLeader } from '../services/dataService';
 import { getEmptyEmployeeToAdd, hasNoErrors } from '../utils/utils';
 
 import { useHierarchy } from '../hooks/useHierarchy';
@@ -20,11 +20,36 @@ export const EmployeeAddPage = () => {
   const [formMessage, setFormMessage] = useState(null);
 
   useEffect(() => {
-    (async () => {
-      let response = await getTeamById(params.teamId);
-      setParentTeam(response.data);
-    })();
+    if (params.teamId) {
+      (async () => {
+        let response = await getTeamById(params.teamId);
+        let parentTeam = response.data;
+        setParentTeam(parentTeam);
+      })();
+    }
   }, [params]);
+
+  useEffect(() => {
+    (async () => {
+      let teamLeaderIsPresent = await hasTeamLeader(parentTeam._id);
+      if (!teamLeaderIsPresent) {
+        setEmployee({ ...employee, position: 'Team Leader' });
+      }
+    })();
+  }, [parentTeam]);
+
+  useEffect(() => {
+    let timer;
+    timer = setTimeout(() => {
+      setFormMessage('');
+    }, 2500);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [formMessage]);
 
   const onChangeEmployee = async (changes) => {
     setEmployee({ ...employee, ...changes });
@@ -32,9 +57,17 @@ export const EmployeeAddPage = () => {
 
   const onAddEmployee = async () => {
     if (!isValidData(employee)) return;
-    await addEmployee(employee, parentTeam._id);
-    reloadHierarchy();
-    setEmployee(getEmptyEmployeeToAdd());
+    let response = await addEmployee(employee, parentTeam._id);
+
+    if (response && response.status === 'error') {
+      setFormMessage({ text: response.message, type: 'error' });
+      setEmployee(employee);
+    }
+
+    if (response.status === 'success') {
+      reloadHierarchy();
+      setEmployee(getEmptyEmployeeToAdd());
+    }
   };
 
   const isValidData = (employee) => {
@@ -153,7 +186,7 @@ export const EmployeeAddPage = () => {
       <div className="row">
         <div className="column column-20 column-offset-20">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Add New Employee"
             onClick={onAddEmployee}

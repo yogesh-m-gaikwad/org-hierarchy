@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { getEmployeeById, getTeamById } from '../services/dataService';
+import {
+  addTeam,
+  deleteTeam,
+  getEmployeeById,
+  getTeamById,
+  updateTeam,
+} from '../services/dataService';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { EMAIL_VALIDATION_REGEX } from '../utils/constants';
@@ -27,8 +33,10 @@ export const TeamEditPage = () => {
         let response = await getTeamById(params.teamId);
         setOriginalTeam(response.data);
         setTeam(response.data);
-        response = await getEmployeeById(response.data.managerId);
-        setParentEmployee(response.data);
+        if (response.data && response.data.manager_id) {
+          response = await getEmployeeById(response.data.manager_id);
+          setParentEmployee(response.data);
+        }
       }
     })();
   }, [params]);
@@ -42,7 +50,7 @@ export const TeamEditPage = () => {
   useEffect(() => {
     let timer;
     timer = setTimeout(() => {
-      setAppMessage('');
+      setFormMessage('');
     }, 2500);
 
     return () => {
@@ -62,18 +70,17 @@ export const TeamEditPage = () => {
 
   const onSaveTeam = async () => {
     const response = await updateTeam(team);
-    setOriginalTeam(response.data);
-    setTeam(response.data);
 
-    return response;
-  };
+    if (response && response.status === 'error') {
+      setFormMessage({ text: response.message, type: 'error' });
+      setTeam(team);
+    }
 
-  const onAddTeam = async () => {
-    const response = await addTeam(team);
-    setOriginalTeam(response.data);
-    setTeam(response.data);
-
-    return response;
+    if (response.status === 'success') {
+      setFormMessage({ text: response.message, type: 'success' });
+      setOriginalTeam(response.data);
+      setTeam(response.data);
+    }
   };
 
   const onRemoveTeam = async () => {
@@ -160,7 +167,7 @@ export const TeamEditPage = () => {
       <div className="row">
         <div className="column  column-25 column-offset-20">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Save Team Details"
             onClick={(e) => {
@@ -180,7 +187,7 @@ export const TeamEditPage = () => {
         </div>
         <div className="column column-25">
           <button
-            className="button button-outline form-button"
+            className="button button-small  button-outline form-button"
             type="button"
             title="Reset Team Details"
             onClick={(e) => {
@@ -192,7 +199,7 @@ export const TeamEditPage = () => {
         </div>
         <div className="column  column-25">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Delete Team"
             onClick={(e) => {

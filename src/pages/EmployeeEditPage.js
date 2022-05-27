@@ -77,13 +77,16 @@ export const EmployeeEditPage = () => {
   const onRemoveEmployee = async () => {
     const response = await deleteEmployee(employee);
 
+    if (response && response.status === 'error') {
+      setFormMessage({ text: response.message, type: 'error' });
+    } else {
+      reloadHierarchy();
+      navigate(`/`);
+    }
+
     if (response.status === 'success') {
       setOriginalEmployee(null);
       setEmployee(null);
-      // TODO: show success message
-      return response;
-    } else {
-      return response;
     }
   };
 
@@ -233,7 +236,7 @@ export const EmployeeEditPage = () => {
         <div className="row">
           <div className="column">
             <button
-              className="form-button"
+              className="button button-small form-button"
               type="button"
               title="Save Employee Details"
               onClick={(e) => {
@@ -251,7 +254,7 @@ export const EmployeeEditPage = () => {
               Save
             </button>
             <button
-              className="button button-outline form-button"
+              className="button button-small  button-outline form-button"
               type="button"
               title="Reset Edits"
               onClick={(e) => {
@@ -262,7 +265,7 @@ export const EmployeeEditPage = () => {
             </button>
             {showPromote && (
               <button
-                className="form-button"
+                className="button button-small form-button"
                 type="button"
                 title="Promote to Next Level"
                 onClick={(e) => {
@@ -282,19 +285,10 @@ export const EmployeeEditPage = () => {
             )}
             {showDelete && (
               <button
-                className="form-button"
+                className="button button-small form-button"
                 type="button"
                 title="Delete Employee"
-                onClick={(e) => {
-                  onRemoveEmployee(employee).then((response) => {
-                    if (response && response.status === 'error') {
-                      setFormMessage({ text: response.message, type: 'error' });
-                    } else {
-                      reloadHierarchy();
-                      navigate(`/`);
-                    }
-                  });
-                }}
+                onClick={onRemoveEmployee}
               >
                 Delete
               </button>
@@ -343,7 +337,7 @@ export const EmployeeEditPage = () => {
             </div>
             <div className="column column-25">
               <button
-                className="form-button"
+                className="button button-small form-button"
                 type="button"
                 title="Move Employee"
                 onClick={(e) => {

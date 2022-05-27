@@ -13,7 +13,7 @@ import { useHierarchy } from '../hooks/useHierarchy';
 export const TeamAddPage = () => {
   const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   const [errors, setErrors] = useState({});
-  const [formMessage, _setFormMessage] = useState(null);
+  const [formMessage, setFormMessage] = useState(null);
   const [team, setTeam] = useState(null);
   const [parentEmployee, setParentEmployee] = useState(null);
   let params = useParams();
@@ -23,16 +23,36 @@ export const TeamAddPage = () => {
       if (params.managerId) {
         const response = await getEmployeeById(params.managerId);
         setParentEmployee(response.data);
-        setTeam(getEmptyTeamToAdd());
+        if (!team) {
+          setTeam(getEmptyTeamToAdd());
+        }
       }
     })();
   }, [params]);
 
+  useEffect(() => {
+    let timer;
+    timer = setTimeout(() => {
+      setFormMessage('');
+    }, 2500);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [formMessage]);
+
   const onAddTeam = async () => {
     const response = await addTeam(team);
-    setTeam(response.data);
+    if (response && response.status === 'error') {
+      setFormMessage({ text: response.message, type: 'error' });
+      setTeam(team);
+    }
 
-    return response;
+    if (response.status === 'success') {
+      setTeam(getEmptyTeamToAdd());
+    }
   };
 
   const onChangeTeam = async (changes) => {
@@ -112,7 +132,7 @@ export const TeamAddPage = () => {
       <div className="row">
         <div className="column column-20 column-offset-80">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Add New Team"
             onClick={(e) => {

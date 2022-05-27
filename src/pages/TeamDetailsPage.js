@@ -45,7 +45,7 @@ const TeamDetailsPage = () => {
       <br></br>
       <div className="row">
         <button
-          className="form-button"
+          className="button button-small form-button"
           type="button"
           title="Add Team Member"
           onClick={(e) => {
@@ -59,7 +59,7 @@ const TeamDetailsPage = () => {
           Add Team Member
         </button>
         <button
-          className="form-button"
+          className="button button-small form-button"
           type="button"
           title="Edit Team Details"
           onClick={(e) => {
