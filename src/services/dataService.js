@@ -60,7 +60,9 @@ export const fetchDataFromLocalStorage = async () => {
  * @returns The employee matching the provided id.
  */
 export const getEmployeeById = async (employeeId) => {
-  return employeesData.hasOwnProperty(employeeId) ? { data: employeesData[employeeId] } : {};
+  return employeesData.hasOwnProperty(employeeId)
+    ? { data: employeesData[employeeId] }
+    : { message: 'Employee not found', status: 'error' };
 };
 
 /**
@@ -318,7 +320,9 @@ export const deleteEmployee = async (employee) => {
 };
 
 export const getTeamById = async (teamId) => {
-  return teamsData.hasOwnProperty(teamId) ? { data: teamsData[teamId] } : {};
+  return teamsData.hasOwnProperty(teamId)
+    ? { data: teamsData[teamId] }
+    : { message: 'Team not found', status: 'error' };
 };
 
 /**
@@ -356,20 +360,36 @@ export const getRandomTeamLeader = (managerId) => {
 export const addTeam = async (team) => {
   // Add team in global variable and local storage storage to simulate db
   if (team._id === '') {
-    team._id = generateTeamId(teamsData);
+    let validationError = validTeam(team);
+    if (!validationError) {
+      team._id = generateTeamId(teamsData);
 
-    let response = await getEmployeeById(team.manager_id);
-    let manager = response.data;
+      let response = await getEmployeeById(team.manager_id);
+      let manager = response.data;
 
-    teamsData[team._id] = { ...team, department: manager.department };
-    localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
+      teamsData[team._id] = { ...team, department: manager.department };
+      localStorage.setItem(TEAMS_DATA_KEY, JSON.stringify(teamsData));
 
-    // Update the teams entry for manager
-    manager.teams.push(team._id);
-    updateEmployee(manager);
+      // Update the teams entry for manager
+      manager.teams.push(team._id);
+      updateEmployee(manager);
+      return { data: teamsData[team._id], message: 'Team added successfully', status: 'success' };
+    } else {
+      return { message: validationError, status: 'error' };
+    }
   }
 
-  return { data: teamsData[team._id], message: 'Team added successfully', status: 'success' };
+  return { message: 'Invalid team data!', status: 'error' };
+};
+
+const validTeam = (team) => {
+  let filteredTeams = filter(teamsData, (t) => t.name.toLowerCase() === team.name.toLowerCase());
+  let keys = Object.keys(filteredTeams);
+  if (keys && keys.length > 0) {
+    return 'Team with same name exists, please select another team name!';
+  } else {
+    return '';
+  }
 };
 
 /**
@@ -394,7 +414,7 @@ export const deleteTeam = async (team) => {
   // Update the team data in global variable and local storage storage to simulate db
   if (teamsData.hasOwnProperty(team._id)) {
     // only delete team member
-    let hasTeamMembers = await hasTeamAnyMembers(team._id);
+    let hasTeamMembers = await hasTeamLeader(team._id);
     if (!hasTeamMembers) {
       employeesData[team.manager_id].teams = employeesData[team.manager_id].teams.filter(
         (t) => t != team._id
@@ -439,7 +459,7 @@ export const getAllowedTeams = async (employeeId) => {
  * @param {*} teamId
  * @returns true if team has any members, false otherwise.
  */
-export const hasTeamAnyMembers = async (teamId) => {
+export const hasTeamLeader = async (teamId) => {
   if (teamId) {
     let filteredEmployees = filter(employeesData, (e) => e.parent_id === teamId);
     if (filteredEmployees && Object.keys(filteredEmployees).length > 0) {

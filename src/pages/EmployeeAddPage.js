@@ -1,18 +1,74 @@
 import { EMAIL_VALIDATION_REGEX, PHONE_VALIDATION_REGEX } from '../utils/constants';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { addEmployee, getTeamById, hasTeamLeader } from '../services/dataService';
+import { getEmptyEmployeeToAdd, hasNoErrors } from '../utils/utils';
 
-import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
+import { useParams } from 'react-router-dom';
 
 /**
  * Add new employee page.
- * @param {*} props
  * @returns EmployeeAddPage Component.
  */
-export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmployee }) => {
+export const EmployeeAddPage = () => {
+  const params = useParams();
   const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   const [errors, setErrors] = useState({});
+  const emptyEmployee = getEmptyEmployeeToAdd();
+  const [employee, setEmployee] = useState(emptyEmployee);
+  const [parentTeam, setParentTeam] = useState(null);
   const [formMessage, setFormMessage] = useState(null);
+
+  useEffect(() => {
+    if (params.teamId) {
+      (async () => {
+        let response = await getTeamById(params.teamId);
+        let parentTeam = response.data;
+        setParentTeam(parentTeam);
+      })();
+    }
+  }, [params]);
+
+  useEffect(() => {
+    (async () => {
+      let teamLeaderIsPresent = await hasTeamLeader(parentTeam._id);
+      if (!teamLeaderIsPresent) {
+        setEmployee({ ...employee, position: 'Team Leader' });
+      }
+    })();
+  }, [parentTeam]);
+
+  useEffect(() => {
+    let timer;
+    timer = setTimeout(() => {
+      setFormMessage('');
+    }, 2500);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [formMessage]);
+
+  const onChangeEmployee = async (changes) => {
+    setEmployee({ ...employee, ...changes });
+  };
+
+  const onAddEmployee = async () => {
+    if (!isValidData(employee)) return;
+    let response = await addEmployee(employee, parentTeam._id);
+
+    if (response && response.status === 'error') {
+      setFormMessage({ text: response.message, type: 'error' });
+      setEmployee(employee);
+    }
+
+    if (response.status === 'success') {
+      reloadHierarchy();
+      setEmployee(getEmptyEmployeeToAdd());
+    }
+  };
 
   const isValidData = (employee) => {
     let errors = {};
@@ -49,10 +105,14 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
     }
   };
 
+  if (!parentTeam) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="container">
       <div className="row">
-        <h4 className="column form-title">Add New Team Member - {team.name}</h4>
+        <h4 className="column form-title">Add New Team Member - {parentTeam.name}</h4>
       </div>
       <br></br>
       <div className="row">
@@ -126,16 +186,10 @@ export const EmployeeAddPage = ({ team, employee, onChangeEmployee, onAddEmploye
       <div className="row">
         <div className="column column-20 column-offset-20">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Add New Employee"
-            onClick={(e) => {
-              if (!isValidData(employee)) return;
-
-              onAddEmployee(team._id).then((response) => {
-                reloadHierarchy();
-              });
-            }}
+            onClick={onAddEmployee}
           >
             Add
           </button>

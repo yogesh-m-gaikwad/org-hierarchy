@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 
 /**
  * List of team members page.
- * @param {*} props
  * @returns TeamMembersListPage Component.
  */
 const TeamMembersListPage = () => {

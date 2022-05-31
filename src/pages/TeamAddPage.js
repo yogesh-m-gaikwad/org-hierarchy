@@ -1,18 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { addTeam, getEmployeeById } from '../services/dataService';
+import { getEmptyTeamToAdd, hasNoErrors } from '../utils/utils';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { EMAIL_VALIDATION_REGEX } from '../utils/constants';
-import { hasNoErrors } from '../utils/utils';
 import { useHierarchy } from '../hooks/useHierarchy';
 
 /**
  * Add new team page.
- * @param {*} props
  * @returns TeamAddPage Component.
  */
-export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
+export const TeamAddPage = () => {
   const [_hierarchy, _setHierarchy, reloadHierarchy] = useHierarchy();
   const [errors, setErrors] = useState({});
-  const [formMessage, _setFormMessage] = useState(null);
+  const [formMessage, setFormMessage] = useState(null);
+  const [team, setTeam] = useState(null);
+  const [parentEmployee, setParentEmployee] = useState(null);
+  let params = useParams();
+
+  useEffect(() => {
+    (async () => {
+      if (params.managerId) {
+        const response = await getEmployeeById(params.managerId);
+        setParentEmployee(response.data);
+        if (!team) {
+          setTeam(getEmptyTeamToAdd());
+        }
+      }
+    })();
+  }, [params]);
+
+  useEffect(() => {
+    let timer;
+    timer = setTimeout(() => {
+      setFormMessage('');
+    }, 2500);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [formMessage]);
+
+  const onAddTeam = async () => {
+    const response = await addTeam(team);
+    if (response && response.status === 'error') {
+      setFormMessage({ text: response.message, type: 'error' });
+      setTeam(team);
+    }
+
+    if (response.status === 'success') {
+      setTeam(getEmptyTeamToAdd());
+    }
+  };
+
+  const onChangeTeam = async (changes) => {
+    setTeam({ ...team, ...changes });
+  };
 
   const isValidData = (team) => {
     let errors = {};
@@ -37,10 +82,16 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
     }
   };
 
+  if (!team) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="container">
       <div className="row">
-        <h4 className="form-label form-title">Add New Team ({employee.position})</h4>
+        <h4 className="form-label form-title">
+          Add New Team for ({parentEmployee.name} - {parentEmployee.position})
+        </h4>
       </div>
       <div className="row">
         <div className="column column-20">
@@ -81,13 +132,13 @@ export const TeamAddPage = ({ employee, team, onChangeTeam, onAddTeam }) => {
       <div className="row">
         <div className="column column-20 column-offset-80">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Add New Team"
             onClick={(e) => {
               if (!isValidData(team)) return;
 
-              team.manager_id = employee._id;
+              team.manager_id = parentEmployee._id;
               onAddTeam(team).then((_response) => {
                 reloadHierarchy();
               });

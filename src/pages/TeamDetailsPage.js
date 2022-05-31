@@ -1,13 +1,35 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { getTeamById } from '../services/dataService';
 
 /**
  * Team details page.
- * @param {*} props
  * @returns TeamDetailsPage Component.
  */
-const TeamDetailsPage = ({ team }) => {
+const TeamDetailsPage = () => {
+  const [team, setTeam] = useState(null);
+  let params = useParams();
   let navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (params.teamId) {
+        const response = await getTeamById(params.teamId);
+
+        if (response.status === 'error') {
+          setFormMessage({ text: response.message, type: 'error' });
+        } else {
+          setFormMessage('');
+          setTeam(response.data);
+        }
+      }
+    })();
+  }, [params]);
+
+  if (!team) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container">
@@ -29,7 +51,7 @@ const TeamDetailsPage = ({ team }) => {
       <br></br>
       <div className="row">
         <button
-          className="form-button"
+          className="button button-small form-button"
           type="button"
           title="Add Team Member"
           onClick={(e) => {
@@ -43,7 +65,7 @@ const TeamDetailsPage = ({ team }) => {
           Add Team Member
         </button>
         <button
-          className="form-button"
+          className="button button-small form-button"
           type="button"
           title="Edit Team Details"
           onClick={(e) => {

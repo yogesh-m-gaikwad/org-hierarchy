@@ -1,4 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import {
+  addTeam,
+  deleteTeam,
+  getEmployeeById,
+  getTeamById,
+  updateTeam,
+} from '../services/dataService';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { EMAIL_VALIDATION_REGEX } from '../utils/constants';
 import { hasNoErrors } from '../utils/utils';
@@ -6,23 +14,43 @@ import { useHierarchy } from '../hooks/useHierarchy';
 
 /**
  * Edit Team details page.
- * @param {*} props
  * @returns TeamEditPage Component.
  */
-export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRemoveTeam }) => {
+export const TeamEditPage = () => {
   const [_hierarchy, _setHierarchy, reloadHierarchy, _filterHierarchy, appMessage, setAppMessage] =
     useHierarchy();
   const [errors, setErrors] = useState({});
   const [formMessage, setFormMessage] = useState(null);
+  const [originalTeam, setOriginalTeam] = useState(null);
+  const [team, setTeam] = useState(null);
+  const [parentEmployee, setParentEmployee] = useState(null);
+  let navigate = useNavigate();
+  let params = useParams();
 
   useEffect(() => {
-    isValidData(team);
+    (async () => {
+      if (params.teamId) {
+        let response = await getTeamById(params.teamId);
+        setOriginalTeam(response.data);
+        setTeam(response.data);
+        if (response.data && response.data.manager_id) {
+          response = await getEmployeeById(response.data.manager_id);
+          setParentEmployee(response.data);
+        }
+      }
+    })();
+  }, [params]);
+
+  useEffect(() => {
+    if (team) {
+      isValidData(team);
+    }
   }, [team]);
 
   useEffect(() => {
     let timer;
     timer = setTimeout(() => {
-      setAppMessage('');
+      setFormMessage('');
     }, 2500);
 
     return () => {
@@ -30,7 +58,42 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
         clearTimeout(timer);
       }
     };
-  }, [appMessage]);
+  }, [formMessage]);
+
+  const onChangeTeam = async (changes) => {
+    setTeam({ ...team, ...changes });
+  };
+
+  const onResetTeam = async () => {
+    setTeam(originalTeam);
+  };
+
+  const onSaveTeam = async () => {
+    const response = await updateTeam(team);
+
+    if (response && response.status === 'error') {
+      setFormMessage({ text: response.message, type: 'error' });
+      setTeam(team);
+    }
+
+    if (response.status === 'success') {
+      setFormMessage({ text: response.message, type: 'success' });
+      setOriginalTeam(response.data);
+      setTeam(response.data);
+    }
+  };
+
+  const onRemoveTeam = async () => {
+    const response = await deleteTeam(team);
+
+    if (response && response.status === 'success') {
+      setOriginalTeam(null);
+      setTeam(null);
+      navigate(`/`);
+    } else {
+      return response;
+    }
+  };
 
   const isValidData = (team) => {
     let errors = {};
@@ -54,6 +117,10 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
       return false;
     }
   };
+
+  if (!team) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container">
@@ -100,7 +167,7 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
       <div className="row">
         <div className="column  column-25 column-offset-20">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Save Team Details"
             onClick={(e) => {
@@ -120,7 +187,7 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
         </div>
         <div className="column column-25">
           <button
-            className="button button-outline form-button"
+            className="button button-small  button-outline form-button"
             type="button"
             title="Reset Team Details"
             onClick={(e) => {
@@ -132,7 +199,7 @@ export const TeamEditPage = ({ team, onChangeTeam, onResetTeam, onSaveTeam, onRe
         </div>
         <div className="column  column-25">
           <button
-            className="form-button"
+            className="button button-small form-button"
             type="button"
             title="Delete Team"
             onClick={(e) => {

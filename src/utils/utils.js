@@ -142,7 +142,7 @@ export const filterHierarchyData = (employees, teams, filterString) => {
     return generateHierarchy(filteredEmployees, filteredTeams);
   }
 
-  return {};
+  return null;
 };
 
 /**
