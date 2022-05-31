@@ -4,11 +4,6 @@
 
 The application is deployed at [GitHub Page](https://yogesh-m-gaikwad.github.io/org-hierarchy/)
 
-## Table of Content:
-
-- [Setup](#setup)
-
-
 ## Setup
 
 - download or clone the repository
