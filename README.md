@@ -38,3 +38,6 @@ Builds the app for production to the `build` folder.<br>
 - List of team members at a given level is available using 'Employees List' option on parent's page
 - To add team member or new team visit the parent details page.
 - To reset to original state click restore data link on Welcome Page
+
+## TEST
+- Test Merge Conflict
