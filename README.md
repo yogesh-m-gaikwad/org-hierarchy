@@ -41,3 +41,7 @@ Builds the app for production to the `build` folder.<br>
 
 ## TEST
 - Test Merge Conflict
+
+A
+B
+C
